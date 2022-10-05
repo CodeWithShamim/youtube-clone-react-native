@@ -1,23 +1,28 @@
 import {View,Text,Image,StyleSheet} from 'react-native'
 import React from 'react'
 import {Colors,GlobalStyle} from '../styles';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-const VideoItem=({data}) => {
+const VideoItem=({item}) => {
 
-    const {thumbnail,user}=data[0];
     const globalStyle=GlobalStyle.useGlobalStyle();
 
     return (
         <View style={styles.root}>
             {/* thumbnail */}
             <View>
-                <Image style={styles.thumbnail} source={{uri: thumbnail}}></Image>
+                <Image style={styles.thumbnail} source={{uri: item?.thumbnail}}></Image>
                 <Text style={styles.time}>15:08</Text>
             </View>
 
             {/* video details  */}
-            <View>
-                <Image style={globalStyle.avatar} source={{uri: user.Image}}></Image>
+            <View style={[globalStyle.rowCenterCenter,globalStyle.mv,globalStyle.mh]}>
+                <Image style={globalStyle.avatar} source={{uri: item?.user.image}}></Image>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{item?.title}</Text>
+                    <Text style={styles.subtitle}>{item?.user.name} - 200k views - 4 days ago</Text>
+                </View>
+                <MaterialCommunityIcons name="dots-vertical" size={20} color={Colors.primary} />
             </View>
 
         </View>
@@ -28,10 +33,12 @@ const styles=StyleSheet.create({
     root: {
         // flex: 1,
     },
+
     thumbnail: {
         width: "100%",
         aspectRatio: 16/9,
     },
+
     time: {
         position: "absolute",
         right: 5,
@@ -43,7 +50,23 @@ const styles=StyleSheet.create({
         paddingHorizontal: 4,
         paddingVertical: 2,
         borderRadius: 3,
-    }
+    },
+
+    titleContainer: {
+        flex: 1,
+        paddingHorizontal: 10,
+    },
+
+    title: {
+        fontWeight: "500",
+        color: Colors.primary,
+        fontSize: 14
+    },
+
+    subtitle: {
+        fontSize: 14,
+        color: "gray",
+    },
 });
 
 export default VideoItem;
