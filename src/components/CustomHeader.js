@@ -14,10 +14,10 @@ const CustomHeader = () => {
             <Image style={styles.logo} source={logo} />
 
             <View style={[globalStyle.rowCenterBetween, {width:"35%"}]}>
-                <Feather name='cast' size={23} color={Colors.secondary}/>
-                <AntDesign name='bells' size={23} color={Colors.secondary}/>
-                <Feather name='search' size={23} color={Colors.secondary}/>
-                <FontAwesome name='user' size={23} color={Colors.secondary}/>
+                <Feather name='cast' size={20} color={Colors.secondary}/>
+                <AntDesign name='bells' size={20} color={Colors.secondary}/>
+                <Feather name='search' size={20} color={Colors.secondary}/>
+                <FontAwesome name='user' size={20} color={Colors.secondary}/>
             </View>
         </View>
     )
