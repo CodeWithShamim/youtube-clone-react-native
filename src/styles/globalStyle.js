@@ -1,6 +1,7 @@
-import {StyleSheet, Platform} from "react-native";
+import { StyleSheet, Platform } from "react-native";
+import { Colors } from ".";
 
-export const useGlobalStyle=() => {
+export const useGlobalStyle = () => {
     return StyleSheet.create({
         avatar: {
             width: 40,
@@ -22,23 +23,41 @@ export const useGlobalStyle=() => {
             marginVertical: 10
         },
 
+        textSmall: {
+            fontSize: 12,
+            fontWeight: "400",
+            color: Colors.primary,
+        },
+
+        textRegular: {
+            fontSize: 14,
+            fontWeight: "500",
+            color: Colors.primary,
+        },
+
+        textBold: {
+            fontWeight: "bold",
+            fontSize: 16,
+            color: Colors.primary,
+        },
+
         shadow: Platform.OS === "android" ? {
             shadowColor: "#ddd",
-            shadowOpacity:0.25,
-            shadowRadius:25,
-            elevation:15,
+            shadowOpacity: 0.25,
+            shadowRadius: 25,
+            elevation: 15,
             shadowOffset: {
-                height:0,
-                width:0,
+                height: 0,
+                width: 0,
             },
         } : {
             shadowColor: '#aaa',
             shadowOpacity: 0.2,
             shadowRadius: 15,
-    
-            shadowOffset:{
-                height:3,
-                width:1
+
+            shadowOffset: {
+                height: 3,
+                width: 1
             }
         },
 
@@ -50,6 +69,11 @@ export const useGlobalStyle=() => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
+        },
+
+        rowBetween: {
+            flexDirection: "row",
+            justifyContent: "space-between",
         },
 
         rowCenterBetween: {

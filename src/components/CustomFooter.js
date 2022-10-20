@@ -20,7 +20,7 @@ const CustomFooter = () => {
             {tabs.map((tab, index) =>
                 <Pressable key={index} style={{alignItems:"center"}}>
 
-                    <FeatherIcon name={tab.icon} size={tab.name === "Plus" ? 35 : 20} color={Colors.secondary} />
+                    <FeatherIcon name={tab.icon} size={tab.name === "Plus" ? 30 : 20} color={Colors.secondary} />
                     {tab.name !== "Plus" && <Text style={styles.tabIconName}>{tab.name}</Text>}
                 </Pressable>
             )}

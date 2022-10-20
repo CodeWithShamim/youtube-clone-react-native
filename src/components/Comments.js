@@ -1,0 +1,42 @@
+import { View, Text, Image, StyleSheet } from 'react-native'
+import React from 'react'
+import { Colors, GlobalStyle } from '../styles'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+
+const Comments = ({ item }) => {
+    const { user, createdAt, comment } = item
+    const globalStyle = GlobalStyle.useGlobalStyle()
+
+    return (
+        <View style={styles.container}>
+            <View style={[globalStyle.rowCenterBetween, globalStyle.mh,{flex:1}]}>
+
+                <View style={[globalStyle.rowBetween, {flex:1}]}>
+                    <Image style={globalStyle.miniAvatar} source={{ uri: user.image }} />
+                    <View style={{ marginLeft: 10, flex:1 }}>
+                        <Text style={globalStyle.textSmall}>{user.name} - {createdAt}</Text>
+                        <Text style={[globalStyle.textRegular, { marginTop: 5 }]}>{comment}</Text>
+
+                        <View style={[globalStyle.rowCenterBetween, globalStyle.mv ,{width:"25%"}]}>
+                            <AntDesignIcon name="like1" size={12} color={Colors.primary} />
+                            <AntDesignIcon name="dislike2" size={12} color={Colors.primary} />
+                            <FontAwesomeIcon name="comments-o" size={12} color={Colors.primary} />
+                        </View>
+                    </View>
+                </View>
+
+                <MaterialCommunityIcons name='dots-vertical' size={16} color={Colors.primary} />
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        marginVertical: 15,
+    },
+});
+
+export default Comments
