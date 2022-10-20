@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet, ScrollView, Image, FlatList } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import VideoPlayer from '../../components/VideoPlayer'
 import { Colors, GlobalStyle } from '../../styles'
 import VideoActionItem from '../../components/VideoActionItem'
@@ -24,10 +24,10 @@ const VideoPlayScreen = ({ route }) => {
         { name: 'Save', icon: 'save' },
     ]
 
-    const handleShowComments = (index) => {
+    const handleShowComments = useCallback((index) => {
         commentsSheetRef.current?.snapToIndex(index)
-      }
-
+    }, [])
+    
     return (
         <View style={styles.container}>
             <VideoPlayer />
@@ -65,7 +65,7 @@ const VideoPlayScreen = ({ route }) => {
                         </View>
 
                         {/* comments */}
-                        <Pressable onPress={()=>handleShowComments(1)} style={{paddingBottom:12}}>
+                        <Pressable onPress={() => handleShowComments(1)} style={{ paddingBottom: 12 }}>
                             <View style={[globalStyle.rowCenterBetween, globalStyle.mh]}>
                                 <Text>Comments 228</Text>
                                 <FeatherIcon name='chevrons-down' size={16} color={Colors.primary} />
@@ -83,7 +83,7 @@ const VideoPlayScreen = ({ route }) => {
                 showsVerticalScrollIndicator={false}
             />
 
-            <BottomSheets commentsSheetRef={commentsSheetRef}/>
+            <BottomSheets ref={commentsSheetRef} commentsSheetRef={commentsSheetRef} />
         </View>
     )
 }

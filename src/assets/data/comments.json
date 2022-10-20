@@ -82,5 +82,17 @@
     "likes": 113,
     "dislikes": 2,
     "replies": 6
+  },
+  {
+    "id": "8",
+    "createdAt": "5 months ago",
+    "comment": "Thanks )",
+    "user": {
+      "name": "Smoth John",
+      "image": "https://img.youtube.com/vi/FPRdZkzePK8/maxresdefault.jpg"
+    },
+    "likes": 113,
+    "dislikes": 2,
+    "replies": 6
   }
 ]
