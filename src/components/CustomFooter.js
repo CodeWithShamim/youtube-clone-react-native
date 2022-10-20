@@ -18,7 +18,7 @@ const CustomFooter = () => {
     return (
         <View style={[styles.tabContainer, globalStyle.rowCenterBetween]}>
             {tabs.map((tab, index) =>
-                <Pressable style={{alignItems:"center"}}>
+                <Pressable key={index} style={{alignItems:"center"}}>
 
                     <FeatherIcon name={tab.icon} size={tab.name === "Plus" ? 35 : 20} color={Colors.secondary} />
                     {tab.name !== "Plus" && <Text style={styles.tabIconName}>{tab.name}</Text>}
@@ -31,7 +31,7 @@ const CustomFooter = () => {
 const styles = StyleSheet.create({
 
     tabContainer: {
-        height: 50,
+        height: 60,
         position: "absolute",
         bottom: 40,
         left: 0,
