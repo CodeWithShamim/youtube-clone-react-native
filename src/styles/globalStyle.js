@@ -8,6 +8,12 @@ export const useGlobalStyle=() => {
             borderRadius: 20,
         },
 
+        miniAvatar: {
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+        },
+
         mh: {
             marginHorizontal: 10
         },
