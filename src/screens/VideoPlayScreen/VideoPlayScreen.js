@@ -1,19 +1,33 @@
 import { View, Text, Pressable, StyleSheet, ScrollView, Image, FlatList } from 'react-native'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import VideoPlayer from '../../components/VideoPlayer'
 import { Colors, GlobalStyle } from '../../styles'
 import VideoActionItem from '../../components/VideoActionItem'
-import data from '../../assets/data/videos.json'
 import FeatherIcon from "react-native-vector-icons/Feather"
 import VideoItem from '../../components/VideoItem'
 import BottomSheets from '../../components/BottomSheets'
+import { DataStore } from 'aws-amplify'
+import { Video } from '../../models'
 
 const VideoPlayScreen = ({ route }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
     const videoId = route.params.id
     const commentsSheetRef = useRef(null)
+    const [videoInfo, setVideoInfo] = useState({});
+    const [videos, setVideos] = useState([]);
 
-    const videoInfo = data.find((v) => v.id === videoId)
+    useEffect(() => {
+        const fetchVideos = async () => {
+            const res = await DataStore.query(Video)
+            setVideos(res)
+        }
+        fetchVideos()
+    }, [])
+
+    useEffect(() => {
+        const videoInfo = videos?.find((v) => v.id === videoId)
+        setVideoInfo(videoInfo)
+    }, [videos])
 
     const actionItems = [
         { name: 'Like', icon: 'like1' },
@@ -27,7 +41,7 @@ const VideoPlayScreen = ({ route }) => {
     const handleShowComments = useCallback((index) => {
         commentsSheetRef.current?.snapToIndex(index)
     }, [])
-    
+
     return (
         <View style={styles.container}>
             <VideoPlayer />
@@ -54,9 +68,9 @@ const VideoPlayScreen = ({ route }) => {
                         {/* user info  */}
                         <View style={[styles.userInfoConainer, globalStyle.rowCenterBetween]}>
                             <View style={globalStyle.rowCenterBetween}>
-                                <Image style={globalStyle.avatar} source={{ uri: videoInfo?.user.image }}></Image>
+                                <Image style={globalStyle.avatar} source={{ uri: videoInfo?.User?.image }}></Image>
                                 <Pressable style={styles.titleContainer}>
-                                    <Text style={styles.title}>{videoInfo?.user.name}</Text>
+                                    <Text style={styles.title}>{videoInfo?.User?.name}</Text>
                                     <Text style={styles.subtitle}>2M subscribers</Text>
                                 </Pressable>
                             </View>
@@ -71,13 +85,13 @@ const VideoPlayScreen = ({ route }) => {
                                 <FeatherIcon name='chevrons-down' size={16} color={Colors.primary} />
                             </View>
                             <View style={[globalStyle.rowCenterBetween, globalStyle.mh, { marginTop: 10 }]}>
-                                <Image style={[globalStyle.miniAvatar]} source={{ uri: videoInfo?.user.image }}></Image>
+                                <Image style={[globalStyle.miniAvatar]} source={{ uri: videoInfo?.User?.image }}></Image>
                                 <Text style={{ width: "90%", marginLeft: 8 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit]</Text>
                             </View>
                         </Pressable>
                     </>
                 }
-                data={data.reverse()}
+                data={videos?.reverse()}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <VideoItem item={item} />}
                 showsVerticalScrollIndicator={false}

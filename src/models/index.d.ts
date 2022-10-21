@@ -46,8 +46,7 @@ export declare class Comments {
   readonly likes: string;
   readonly dislikes: string;
   readonly replies: string;
-  readonly videoID: string;
-  readonly Video?: Video | null;
+  readonly videoID?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Comments, CommentsMetaData>);
   static copyOf(source: Comments, mutator: (draft: MutableModel<Comments, CommentsMetaData>) => MutableModel<Comments, CommentsMetaData> | void): Comments;

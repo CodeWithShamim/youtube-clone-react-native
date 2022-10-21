@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     tabContainer: {
         height: 60,
         position: "absolute",
-        bottom: 40,
+        bottom: 0,
         left: 0,
         right: 0,
         padding: 8,

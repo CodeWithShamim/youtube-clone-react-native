@@ -5,19 +5,25 @@ import { Colors, GlobalStyle } from '../styles'
 import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { Auth } from 'aws-amplify'
 
 const CustomHeader = () => {
     const globalStyle = GlobalStyle.useGlobalStyle();
+
+    const handleSignOut = () => {
+        Auth.signOut()
+    }
 
     return (
         <View style={[styles.container, globalStyle.shadow, globalStyle.rowCenterBetween]}>
             <Image style={styles.logo} source={logo} />
 
-            <View style={[globalStyle.rowCenterBetween, {width:"35%"}]}>
+            <View style={[globalStyle.rowCenterBetween, {width:"40%"}]}>
                 <Feather name='cast' size={20} color={Colors.secondary}/>
                 <AntDesign name='bells' size={20} color={Colors.secondary}/>
                 <Feather name='search' size={20} color={Colors.secondary}/>
                 <FontAwesome name='user' size={20} color={Colors.secondary}/>
+                <FontAwesome onPress={handleSignOut} name='sign-out' size={17} color={Colors.secondary}/>
             </View>
         </View>
     )

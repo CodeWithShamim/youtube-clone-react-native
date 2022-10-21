@@ -249,21 +249,8 @@ export const schema = {
                     "name": "videoID",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "Video": {
-                    "name": "Video",
-                    "isArray": false,
-                    "type": {
-                        "model": "Video"
-                    },
                     "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "videoCommentsId"
-                    }
+                    "attributes": []
                 },
                 "updatedAt": {
                     "name": "updatedAt",
@@ -311,5 +298,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "46f789e61ec9acb00b2a7dd550e5b3a8"
+    "version": "81205fee9918172059a9598ef999378a"
 };
