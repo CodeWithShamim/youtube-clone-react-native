@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import VideoItem from '../../components/VideoItem'
 import CustomHeader from '../../components/CustomHeader'
@@ -7,17 +7,11 @@ import { DataStore } from 'aws-amplify'
 import { Video } from '../../models'
 
 const HomeScreen = () => {
-    const [videos, setVideos] = useState(4);
+    const [videos, setVideos] = useState([]);
 
     useEffect(() => {
-        const fetchVideos = async () => {
-            const res = await DataStore.query(Video)
-            setVideos(res)
-        }
-        fetchVideos()
-    }, [])
-
-    console.log(videos);
+        DataStore.query(Video).then(setVideos)
+    }, [Video])
 
     return (
         <View style={styles.container}>

@@ -13,21 +13,14 @@ const VideoPlayScreen = ({ route }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
     const videoId = route.params.id
     const commentsSheetRef = useRef(null)
+
     const [videoInfo, setVideoInfo] = useState({});
     const [videos, setVideos] = useState([]);
 
     useEffect(() => {
-        const fetchVideos = async () => {
-            const res = await DataStore.query(Video)
-            setVideos(res)
-        }
-        fetchVideos()
-    }, [])
-
-    useEffect(() => {
-        const videoInfo = videos?.find((v) => v.id === videoId)
-        setVideoInfo(videoInfo)
-    }, [videos])
+        DataStore.query(Video).then(setVideos)
+        DataStore.query(Video, videoId).then(setVideoInfo)
+    }, [videoId])
 
     const actionItems = [
         { name: 'Like', icon: 'like1' },
