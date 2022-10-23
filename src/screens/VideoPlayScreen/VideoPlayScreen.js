@@ -1,13 +1,15 @@
-import { View, Text, Pressable, StyleSheet, ScrollView, Image, FlatList } from 'react-native'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { View, Text, Pressable, StyleSheet, ScrollView, Image, FlatList, Alert, TextInput, ActivityIndicator } from 'react-native'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import VideoPlayer from '../../components/VideoPlayer'
 import { Colors, GlobalStyle } from '../../styles'
 import VideoActionItem from '../../components/VideoActionItem'
 import FeatherIcon from "react-native-vector-icons/Feather"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import VideoItem from '../../components/VideoItem'
 import BottomSheets from '../../components/BottomSheets'
 import { DataStore } from 'aws-amplify'
-import { Video } from '../../models'
+import { Comments, Video } from '../../models'
+import CommentItem from '../../components/CommentItem'
 
 const VideoPlayScreen = ({ route }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
@@ -16,7 +18,11 @@ const VideoPlayScreen = ({ route }) => {
 
     const [videoInfo, setVideoInfo] = useState({});
     const [videos, setVideos] = useState([]);
+    const [newComment, setNewComment] = useState("")
+    const [comments, setComments] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
+    // fetch videos 
     useEffect(() => {
         DataStore.query(Video).then(setVideos)
         DataStore.query(Video, videoId).then(setVideoInfo)
@@ -31,9 +37,44 @@ const VideoPlayScreen = ({ route }) => {
         { name: 'Save', icon: 'save' },
     ]
 
+    // open comments bottom sheet 
     const handleShowComments = useCallback((index) => {
         commentsSheetRef.current?.snapToIndex(index)
     }, [])
+
+    // get comments 
+    useEffect(() => {
+        setIsLoading(true)
+        DataStore.query(Comments).then((data) => {
+            setComments(data.reverse())
+            setIsLoading(false)
+        })
+    }, [])
+
+    // send comment 
+    const handleSendComment = async () => {
+        if (!newComment) return Alert.alert("Please!", "Add a comment")
+        setIsLoading(true)
+        setNewComment("")
+
+        try {
+            const res = await DataStore.save(new Comments({
+                comment: newComment,
+                likes: "0",
+                dislikes: "0",
+                replies: "0",
+            }))
+            if (res?.comment) {
+                setComments((preComments) => [{ comment: res.comment }, ...preComments])
+                setIsLoading(false)
+            }
+        } catch (error) {
+            setIsLoading(false)
+            console.warn(error.message)
+        }
+    }
+
+    console.log("videoplay screen");
 
     return (
         <View style={styles.container}>
@@ -90,7 +131,33 @@ const VideoPlayScreen = ({ route }) => {
                 showsVerticalScrollIndicator={false}
             />
 
-            <BottomSheets ref={commentsSheetRef} commentsSheetRef={commentsSheetRef} />
+            {/* bottom sheet  */}
+            <BottomSheets ref={commentsSheetRef} sheetTitle="Comments" commentsSheetRef={commentsSheetRef}>
+                {/* comment box  */}
+                <View style={[globalStyle.rowCenterBetween, styles.commentsBox]}>
+                    <TextInput
+                        placeholder='Add a comments...'
+                        placeholderTextColor="gray"
+                        value={newComment}
+                        onChangeText={(value) => setNewComment(value)}
+                    />
+                    <Pressable onPress={handleSendComment}>
+                        <MaterialCommunityIcons name='send' size={20} color={Colors.primary} />
+                    </Pressable>
+                </View>
+
+                {/* comments  */}
+                {isLoading ?
+                    <View style={{ paddingTop: 30 }}>
+                        <ActivityIndicator size="large" color={Colors.primary} />
+                    </View> :
+                    <FlatList
+                        data={comments}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => <CommentItem item={item} />}
+                        showsVerticalScrollIndicator={false}
+                    />}
+            </BottomSheets>
         </View>
     )
 }
@@ -132,6 +199,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "700",
     },
+
+    commentsBox: {
+        paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#3d3d3d",
+    }
 })
 
-export default VideoPlayScreen
+export default memo(VideoPlayScreen)
