@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Button, ActivityIndicator } from 'react-native'
 import React, { useState, useRef } from 'react'
 import Video from 'react-native-video'
 
-const VideoPlayer = ({ url }) => {
+const VideoPlayer = ({ url, height }) => {
 
   const video = useRef(null);
   const [isBuffer, setIsBuffer] = useState(false);
@@ -15,9 +15,9 @@ const VideoPlayer = ({ url }) => {
     <View>
       <Video
         ref={video}
-        style={styles.video}
+        style={[styles.video, height && {height: height}]}
         source={{
-          uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          uri: url || "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         }}
         onBuffer={() => isBuffer(!isBuffer)}
         resizeMode="cover"
