@@ -17,6 +17,8 @@ export declare class User {
   readonly name: string;
   readonly image: string;
   readonly Video?: Video | null;
+  readonly sub?: string | null;
+  readonly subscribers?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<User, UserMetaData>);
@@ -47,7 +49,11 @@ export declare class Comments {
   readonly dislikes: string;
   readonly replies: string;
   readonly videoID?: string | null;
+  readonly User?: User | null;
+  readonly Video?: Video | null;
+  readonly userID?: string | null;
   readonly updatedAt?: string | null;
+  readonly commentsUserId?: string | null;
   constructor(init: ModelInit<Comments, CommentsMetaData>);
   static copyOf(source: Comments, mutator: (draft: MutableModel<Comments, CommentsMetaData>) => MutableModel<Comments, CommentsMetaData> | void): Comments;
 }

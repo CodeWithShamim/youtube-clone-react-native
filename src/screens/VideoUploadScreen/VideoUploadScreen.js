@@ -43,9 +43,8 @@ const VideoUploadScreen = () => {
         videoQuality: "medium",
         quality: 1,
       })
-      console.log(result);
 
-      if (result.assets[0]?.uri) {
+      if (!result.didCancel && result.assets[0]?.uri) {
         setVideoUrl(result.assets[0]?.uri)
       }
     }
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
   videoBox: {
     width: "95%",
-    height: "28.2%",
+    height: "28%",
     borderWidth: 2,
     borderColor: Colors.primary,
     alignSelf: "center",

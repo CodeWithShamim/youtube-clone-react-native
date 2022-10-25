@@ -16,7 +16,7 @@ const VideoActionItem = ({ icon, name }) => {
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 23,
+        marginHorizontal: 18,
         alignItems: "center",
     },
     IconSubtitle: {

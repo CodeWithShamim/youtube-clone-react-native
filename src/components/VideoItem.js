@@ -23,11 +23,11 @@ const VideoItem = ({ item }) => {
 
             {/* video details  */}
             <View style={[globalStyle.rowCenterCenter, globalStyle.mv, globalStyle.mh]}>
-                <Image style={globalStyle.avatar} source={{ uri: item?.User.image }}></Image>
+                <Image style={globalStyle.avatar} source={{ uri: item?.User?.image }}></Image>
 
                 <Pressable onPress={() => handlePlayVideo(item.id)} style={styles.titleContainer}>
                     <Text style={styles.title}>{item?.title}</Text>
-                    <Text style={styles.subtitle}>{item?.User.name} - 200k views - 4 days ago</Text>
+                    <Text style={styles.subtitle}>{item?.User?.name} - 200k views - 4 days ago</Text>
                 </Pressable>
                 <MaterialCommunityIcons name="dots-vertical" size={20} color={Colors.primary} />
             </View>

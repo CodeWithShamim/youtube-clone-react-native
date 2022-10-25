@@ -1,13 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from './src/screens/HomeScreen'
 import VideoPlayScreen from './src/screens/VideoPlayScreen'
 import { withAuthenticator } from "aws-amplify-react-native";
 import VideoUploadScreen from './src/screens/VideoUploadScreen'
+import { Auth, DataStore } from 'aws-amplify'
+import { User } from './src/models'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    const saveUserToDB = async () => {
+      const userInfo = await Auth.currentAuthenticatedUser()
+      if(!userInfo) return
+      const userId = userInfo.attributes?.sub
+      const isUserInDB = (await DataStore.query(User)).find((u)=> u?.sub === userId)
+
+      console.log(isUserInDB?.sub);
+
+      if (!isUserInDB) {
+        await DataStore.save(new User({
+          name: userInfo.attributes?.email,
+          image: "",
+          sub: userId,
+          subscribers: 0,
+        }))
+        console.log("user save done");
+      } else return false
+    }
+    saveUserToDB()
+
+  }, [])
 
   return (
     <NavigationContainer>

@@ -37,6 +37,20 @@ export const schema = {
                         "targetName": "userVideoId"
                     }
                 },
+                "sub": {
+                    "name": "sub",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "subscribers": {
+                    "name": "subscribers",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -252,6 +266,40 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "User": {
+                    "name": "User",
+                    "isArray": false,
+                    "type": {
+                        "model": "User"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "commentsUserId"
+                    }
+                },
+                "Video": {
+                    "name": "Video",
+                    "isArray": false,
+                    "type": {
+                        "model": "Video"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "videoCommentsId"
+                    }
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "updatedAt": {
                     "name": "updatedAt",
                     "isArray": false,
@@ -259,6 +307,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "commentsUserId": {
+                    "name": "commentsUserId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -298,5 +353,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "81205fee9918172059a9598ef999378a"
+    "version": "2ef28075d3ead02fc9371de91374e4a9"
 };
