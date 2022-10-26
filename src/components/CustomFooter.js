@@ -12,7 +12,7 @@ const CustomFooter = () => {
 
     const tabs = [
         {name: 'Home', screen: 'Home', icon: 'home' },
-        {name: 'Shorts', screen: '', icon: 'youtube' },
+        {name: 'Shorts', screen: 'ShortsVideo', icon: 'youtube' },
         {name: 'Plus', screen: 'VideoUpload', icon: 'plus-circle' },
         {name: 'Subscriptions', screen: '', icon: 'package' },
         {name: 'Library', screen: '', icon: 'video' },

@@ -1,28 +1,25 @@
-import { View, Text, StyleSheet, Button, ActivityIndicator } from 'react-native'
+import { View, StyleSheet, Button, ActivityIndicator } from 'react-native'
 import React, { useState, useRef } from 'react'
 import Video from 'react-native-video'
 
 const VideoPlayer = ({ url, height }) => {
 
-  const video = useRef(null);
-  const [isBuffer, setIsBuffer] = useState(false);
-
-  if (isBuffer) {
-    return <ActivityIndicator size="large" color="red" />
-  }
+  const videoRef = useRef([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <View>
       <Video
-        ref={video}
-        style={[styles.video, height && {height: height}]}
+        ref={videoRef}
+        style={[styles.video, height && { height: height }]}
         source={{
           uri: url || "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         }}
-        onBuffer={() => isBuffer(!isBuffer)}
+        onLoad={() => setIsLoading(false)}
         resizeMode="cover"
         controls
       />
+      {isLoading && <ActivityIndicator style={styles.loading} size="large" color="red" />}
     </View>
   )
 }
@@ -32,7 +29,13 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 16 / 9,
     backgroundColor: "black",
-  }
+  },
+  loading: {
+    position: "absolute",
+    top: 80,
+    left: 0,
+    right: 0,
+  },
 })
 
 export default VideoPlayer
