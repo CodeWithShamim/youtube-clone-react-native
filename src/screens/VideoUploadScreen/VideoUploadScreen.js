@@ -6,12 +6,18 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { launchImageLibrary } from 'react-native-image-picker';
 import VideoPlayer from '../../components/VideoPlayer'
+import "react-native-get-random-values"
+import { v4 as uuidv4 } from 'uuid';
+import { Storage } from 'aws-amplify'
+import RNFetchBlob from 'rn-fetch-blob'
 
 const VideoUploadScreen = () => {
   const globalStyle = GlobalStyle.useGlobalStyle()
   const [videoUrl, setVideoUrl] = useState("")
   const [videoTitle, setVideoTitle] = useState("")
+  const [uploadProgress, setUploadProgress] = useState(0)
 
+  // console.log("uuidv4", uuidv4());
   // request external permission 
   const handleRequestPermission = async () => {
     if (Platform.OS === "android") {
@@ -50,6 +56,40 @@ const VideoUploadScreen = () => {
     }
   }
 
+  // upload video 
+  const handleUploadVideo = async () => {
+    if (!videoUrl) return Alert.alert("Warning!", "Please select a video")
+
+    try {
+      console.log(videoUrl);
+      const response = await fetch(videoUrl)
+      const blob = await response.blob()
+      console.log("Blobbbbbbb", res)
+      const fileKey = `${uuidv4()}.mp4`
+      const result = await Storage.put(fileKey, blob,
+        {
+          progressCallback: (p) => {
+            const averageProgress = p.loaded / p.total
+            setUploadProgress(averageProgress)
+          },
+        }
+      );
+      console.log("Result", result);
+      return fileKey
+    } catch (error) {
+      console.log("Upload error", error)
+      Alert.alert("Error!", error.message)
+    }
+  }
+
+  // upload post 
+  const handleUploadPost = async () => {
+    const fileKey = await handleUploadVideo()
+    console.log(fileKey);
+    setUploadProgress(0)
+
+  }
+
   return (
     <View style={styles.container}>
 
@@ -62,7 +102,7 @@ const VideoUploadScreen = () => {
         <VideoPlayer url={videoUrl} />
       </View>
       {/* video title  */}
-      <View>
+      <View style={{ marginTop: "15%" }}>
         <TextInput
           style={styles.videoTitle}
           placeholder='video title'
@@ -71,10 +111,13 @@ const VideoUploadScreen = () => {
         />
       </View>
       {/* upload video  */}
-      <TouchableOpacity style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}>
+      <TouchableOpacity onPress={handleUploadPost} style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}>
         <FeatherIcon style={globalStyle.mh} name='upload-cloud' size={25} color={Colors.secondary} />
         <Text style={styles.selectBtnText}>Upload</Text>
       </TouchableOpacity>
+
+      {/* progress  */}
+      <View style={[styles.progress, { width: `${uploadProgress * 100}%` }]}></View>
 
       <CustomFooter />
     </View>
@@ -110,9 +153,19 @@ const styles = StyleSheet.create({
     marginTop: "7%",
     paddingVertical: 2,
     paddingLeft: 7,
-    borderRadius:4,
+    borderRadius: 4,
     fontWeight: "500"
   },
+  progress: {
+    // width: "100%",
+    height: "1%",
+    backgroundColor: "#3c763d",
+    borderRadius: 2,
+    position: "absolute",
+    bottom: 60,
+    left: 0,
+    right: 0,
+  }
 })
 
 export default VideoUploadScreen

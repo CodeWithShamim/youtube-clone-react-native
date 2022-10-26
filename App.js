@@ -18,8 +18,6 @@ const App = () => {
       const userId = userInfo.attributes?.sub
       const isUserInDB = (await DataStore.query(User)).find((u)=> u?.sub === userId)
 
-      console.log(isUserInDB?.sub);
-
       if (!isUserInDB) {
         await DataStore.save(new User({
           name: userInfo.attributes?.email,
