@@ -2,7 +2,7 @@ import { View, StyleSheet, Button, ActivityIndicator } from 'react-native'
 import React, { useState, useRef } from 'react'
 import Video from 'react-native-video'
 
-const VideoPlayer = ({ url, height, controls }) => {
+const VideoPlayer = ({ url, height, controls, paused }) => {
 
   const videoRef = useRef([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,13 +11,14 @@ const VideoPlayer = ({ url, height, controls }) => {
     <View>
       <Video
         ref={videoRef}
-        style={[styles.video, height && { height: height }]}
+        style={[styles.video, height ? { height: height } : { aspectRatio: 16 / 9 }]}
         source={{
           uri: url || "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         }}
         onLoad={() => setIsLoading(false)}
         resizeMode="cover"
-        controls={controls}
+        paused={paused || false}
+      // controls={controls}
       />
       {isLoading && <ActivityIndicator style={styles.loading} size="large" color="red" />}
     </View>
@@ -27,7 +28,6 @@ const VideoPlayer = ({ url, height, controls }) => {
 const styles = StyleSheet.create({
   video: {
     width: "100%",
-    aspectRatio: 16 / 9,
     backgroundColor: "black",
   },
   loading: {
