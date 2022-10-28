@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, Dimensions, Alert } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import React, { memo, useState } from 'react'
 import CustomFooter from '../../components/CustomFooter'
 import VideoPlayer from '../../components/VideoPlayer'
@@ -11,7 +11,7 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 const ShortsVideoScreen = () => {
     const globalStyle = GlobalStyle.useGlobalStyle()
     const { width, height } = Dimensions.get("window")
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentIndex, setCurrentIndex] = useState({ index: 0 })
 
     const shorts = [
         {
@@ -44,7 +44,7 @@ const ShortsVideoScreen = () => {
     return (
         <View style={styles.container}>
             <SwiperFlatList
-                // index={0}
+                index={0}
                 vertical={true}
                 data={shorts}
                 onChangeIndex={(i) => setCurrentIndex(i)}
@@ -55,13 +55,14 @@ const ShortsVideoScreen = () => {
                             <VideoPlayer
                                 url={item.sources}
                                 height="96%"
-                                controls={true}
+                                controls={false}
+                                index={currentIndex}
                                 paused={index !== currentIndex.index ? true : false} />
                         </View>
 
                         <LinearGradient
                             colors={["rgba(0,0,0,0.1)", "rgba(0,0,0, 0.5)"]}
-                            style={{ width: width, height: height }}
+                            style={{ width, height: height * 97 / 100 }}
                         >
                             {/* header icon  */}
                             <View style={styles.headerIcon}>

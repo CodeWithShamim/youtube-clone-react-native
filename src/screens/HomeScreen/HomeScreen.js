@@ -13,18 +13,16 @@ const HomeScreen = () => {
     const { height } = Dimensions.get("window")
 
     useEffect(() => {
-        // const fetchVideos = async () => {
-        //     const result = await DataStore.query(Video)
-        //     if (result.length <= 0 ) {
-        //         fetchVideos()
-        //     }
-        //     setVideos(result)
-        // }
-        // fetchVideos()
-        DataStore.query(Video).then(setVideos)
+        const fetchVideos = async () => {
+            const result = await DataStore.query(Video)
+            if (result.length <= 0 ) {
+                fetchVideos()
+            }
+            console.log("Load homeScreen data");
+            setVideos(result)
+        }
+        fetchVideos()
     }, [])
-
-    console.log("DDDDDDDDDDDDDDDDDDDDD");
 
     return (
         <View style={styles.container}>

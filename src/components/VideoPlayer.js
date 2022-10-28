@@ -1,11 +1,30 @@
-import { View, StyleSheet, Button, ActivityIndicator } from 'react-native'
-import React, { useState, useRef } from 'react'
+import { View, StyleSheet, Button, ActivityIndicator, Dimensions,Image } from 'react-native'
+import React, { useState, useRef, useEffect, memo } from 'react'
 import Video from 'react-native-video'
+import { createThumbnail } from "react-native-create-thumbnail";
 
-const VideoPlayer = ({ url, height, controls, paused }) => {
+const VideoPlayer = ({ url, height, controls, index, paused }) => {
+  const { width } = Dimensions.get("window")
 
   const videoRef = useRef([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [generatePoster, setGeneratePoster] = useState("")
+
+  useEffect(() => {
+    if (!videoRef.current) {
+      videoRef.current.seek(0)
+    }
+    console.log("seek");
+  }, [index])
+
+  // generate thumbnail 
+  useEffect(() => {
+    createThumbnail({ url: url })
+      .then(res => setGeneratePoster(res.path))
+      .catch(err => console.log(err.messsage));
+  }, [url])
+
+  console.log(generatePoster);
 
   return (
     <View>
@@ -16,9 +35,13 @@ const VideoPlayer = ({ url, height, controls, paused }) => {
           uri: url || "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         }}
         onLoad={() => setIsLoading(false)}
+        repeat={true}
+        poster={generatePoster || "https://posterspy.com/wp-content/uploads/2022/07/dsfgvsdgdrt.jpg"}
+        ignoreSilentSwitch="ignore"
+        posterResizeMode="cover"
         resizeMode="cover"
-        paused={paused || false}
-      // controls={controls}
+        paused={paused ? true : false}
+        controls={controls ? true : false}
       />
       {isLoading && <ActivityIndicator style={styles.loading} size="large" color="red" />}
     </View>
@@ -38,4 +61,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default VideoPlayer
+export default memo(VideoPlayer)
