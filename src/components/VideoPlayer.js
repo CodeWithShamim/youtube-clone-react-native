@@ -2,7 +2,7 @@ import { View, StyleSheet, Button, ActivityIndicator } from 'react-native'
 import React, { useState, useRef } from 'react'
 import Video from 'react-native-video'
 
-const VideoPlayer = ({ url, height }) => {
+const VideoPlayer = ({ url, height, controls }) => {
 
   const videoRef = useRef([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,7 +17,7 @@ const VideoPlayer = ({ url, height }) => {
         }}
         onLoad={() => setIsLoading(false)}
         resizeMode="cover"
-        controls
+        controls={controls}
       />
       {isLoading && <ActivityIndicator style={styles.loading} size="large" color="red" />}
     </View>

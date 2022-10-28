@@ -9,7 +9,6 @@ import VideoPlayer from '../../components/VideoPlayer'
 import "react-native-get-random-values"
 import { v4 as uuidv4 } from 'uuid';
 import { Storage } from 'aws-amplify'
-import RNFetchBlob from 'rn-fetch-blob'
 
 const VideoUploadScreen = () => {
   const globalStyle = GlobalStyle.useGlobalStyle()
@@ -17,7 +16,6 @@ const VideoUploadScreen = () => {
   const [videoTitle, setVideoTitle] = useState("")
   const [uploadProgress, setUploadProgress] = useState(0)
 
-  // console.log("uuidv4", uuidv4());
   // request external permission 
   const handleRequestPermission = async () => {
     if (Platform.OS === "android") {
@@ -99,7 +97,7 @@ const VideoUploadScreen = () => {
       </TouchableOpacity>
       {/* get selected video  */}
       <View style={styles.videoBox}>
-        <VideoPlayer url={videoUrl} />
+        <VideoPlayer controls={true} url={videoUrl} />
       </View>
       {/* video title  */}
       <View style={{ marginTop: "15%" }}>

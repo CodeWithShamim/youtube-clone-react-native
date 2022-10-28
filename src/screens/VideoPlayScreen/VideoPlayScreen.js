@@ -78,7 +78,7 @@ const VideoPlayScreen = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <VideoPlayer />
+            <VideoPlayer controls={true} />
 
             {/* recommended videos  */}
             <FlatList
@@ -94,7 +94,12 @@ const VideoPlayScreen = ({ route }) => {
                         <View>
                             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                                 {actionItems.map((item, index) =>
-                                    <VideoActionItem key={index} icon={item.icon} name={item.name}></VideoActionItem>
+                                    <VideoActionItem
+                                        key={index}
+                                        icon={item.icon}
+                                        name={item.name}
+                                        mp={{ marginHorizontal: 18 }}
+                                    />
                                 )}
                             </ScrollView>
                         </View>

@@ -1,11 +1,88 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import CustomFooter from '../../components/CustomFooter'
+import VideoPlayer from '../../components/VideoPlayer'
+import { Colors, GlobalStyle } from '../../styles'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import VideoActionItem from '../../components/VideoActionItem'
+import LinearGradient from 'react-native-linear-gradient'
 
 const ShortsVideoScreen = () => {
+    const globalStyle = GlobalStyle.useGlobalStyle()
+
+    const shorts = [
+        {
+            "sources": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            "thumb": "images/ForBiggerBlazes.jpg",
+            "title": "For Bigger Blazes"
+        },
+        {
+            "sources": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+            "thumb": "images/ForBiggerBlazes.jpg",
+            "title": "For Bigger Blazes"
+        },
+        {
+            "sources": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+            "thumb": "images/ForBiggerBlazes.jpg",
+            "title": "For Bigger Blazes"
+        }
+    ]
+
+    const actionItems = [
+        { name: '30k', icon: 'like1' },
+        { name: 'Dislike', icon: 'dislike1' },
+        { name: '82', icon: 'comments' },
+        { name: 'Share', icon: 'share' },
+        { name: '', icon: 'ellipsis1' },
+    ]
+
     return (
         <View style={styles.container}>
-            <Text>ShortsVideoScreen</Text>
+            <View style={styles.videoPlayer}>
+                <VideoPlayer height="96%" controls={true} />
+            </View>
+
+            <LinearGradient colors={["rgba(0,0,0,0.1)", "rgba(0,0,0, 0.5)"]}>
+                {/* header icon  */}
+                <View style={styles.headerIcon}>
+                    <AntDesignIcon
+                        style={{ marginRight: "8%" }}
+                        name='search1' size={25}
+                        color={Colors.secondary} />
+                    <AntDesignIcon
+                        name='camerao'
+                        size={25}
+                        color={Colors.secondary} />
+                </View>
+
+                <View style={styles.userInfoContainer}>
+                    <Text style={styles.title}>Using the styles from above, set start and end like this to make the gradient</Text>
+                    {/* use info  */}
+                    <View style={[globalStyle.row, { alignItems: "center", marginTop: 10 }]}>
+                        <Image
+                            source={{ uri: "https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg" }}
+                            resizeMode="cover"
+                            style={globalStyle.avatar}
+                        />
+                        <Text style={styles.username}>John smith</Text>
+                        <Text style={styles.subscribeBtn}>Subscribe</Text>
+                    </View>
+                </View>
+
+                {/* video action items  */}
+                <View style={styles.actionContainer}>
+                    {actionItems.map((item, index) =>
+                        <VideoActionItem
+                            key={index}
+                            icon={item.icon}
+                            name={item.name}
+                            size={28}
+                            color={Colors.secondary}
+                            mp={{ marginVertical: 10 }}
+                        />
+                    )}
+                </View>
+            </LinearGradient>
 
             <CustomFooter />
         </View>
@@ -15,6 +92,55 @@ const ShortsVideoScreen = () => {
 const styles = StyleSheet.create({
     container: {
         height: "100%"
+    },
+    videoPlayer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+    headerIcon: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        margin: "6%",
+    },
+    userInfoContainer: {
+        width: "80%",
+        height: "80%",
+        marginHorizontal: 10,
+        justifyContent: "flex-end"
+    },
+    title: {
+        color: Colors.secondary,
+        fontWeight: "600",
+        fontSize: 16,
+    },
+    username: {
+        color: Colors.secondary,
+        textTransform: "uppercase",
+        fontWeight: "700",
+        fontSize: 15,
+        marginHorizontal: 10,
+    },
+    subscribeBtn: {
+        width: "30%",
+        textAlign: "center",
+        borderRadius: 3,
+        paddingVertical: 4,
+        textTransform: "uppercase",
+        color: Colors.secondary,
+        backgroundColor: "red",
+        fontWeight: "700",
+    },
+    actionContainer: {
+        position: "absolute",
+        right: 15,
+        bottom: 100,
+    },
+    IconSubtitle: {
+        fontSize: 14,
+        marginTop: 5,
     },
 })
 
