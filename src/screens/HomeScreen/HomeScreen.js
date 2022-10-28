@@ -17,6 +17,7 @@ const HomeScreen = () => {
             const result = await DataStore.query(Video)
             if (result.length <= 0 ) {
                 fetchVideos()
+                return false
             }
             console.log("Load homeScreen data");
             setVideos(result)

@@ -24,6 +24,9 @@ const VideoPlayer = ({ url, height, controls, index, paused }) => {
       .catch(err => console.log(err.messsage));
   }, [url])
 
+  // generate thumbnail 
+  
+
   console.log(generatePoster);
 
   return (

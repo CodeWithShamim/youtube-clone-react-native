@@ -32,7 +32,7 @@ const ShortsVideoScreen = () => {
     ]
 
     const actionItems = [
-        { name: '30k', icon: 'like1' },
+        { name: '50k', icon: 'like1' },
         { name: 'Dislike', icon: 'dislike1' },
         { name: '82', icon: 'comments' },
         { name: 'Share', icon: 'share' },

@@ -13,6 +13,7 @@ import { Storage } from 'aws-amplify'
 const VideoUploadScreen = () => {
   const globalStyle = GlobalStyle.useGlobalStyle()
   const [videoUrl, setVideoUrl] = useState("")
+  const [videoDuration, setVideoDuration] = useState(0)
   const [videoTitle, setVideoTitle] = useState("")
   const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -48,7 +49,10 @@ const VideoUploadScreen = () => {
         quality: 1,
       })
 
-      if (!result.didCancel && result.assets[0]?.uri) {
+      if (result.didCancel) return false
+
+      if (!result.didCancel && result.assets[0]) {
+        setVideoDuration(result.assets[0]?.duration)
         setVideoUrl(result.assets[0]?.uri)
       }
     }
@@ -56,19 +60,21 @@ const VideoUploadScreen = () => {
 
   // upload video 
   const handleUploadVideo = async () => {
-    if (!videoUrl) return Alert.alert("Warning!", "Please select a video")
+    if (!videoUrl) {
+      return Alert.alert("Warning!", "Please select a video")
+    }
+
+    if (videoDuration > 120) return Alert.alert("Sorry!", "This video is too long. video duration can't be up 120s")
 
     try {
-      console.log(videoUrl);
       const response = await fetch(videoUrl)
       const blob = await response.blob()
-      console.log("Blobbbbbbb", res)
       const fileKey = `${uuidv4()}.mp4`
       const result = await Storage.put(fileKey, blob,
         {
           progressCallback: (p) => {
-            const averageProgress = p.loaded / p.total
-            setUploadProgress(averageProgress)
+            const progress = (p.loaded / p.total) * 100
+            setUploadProgress(progress)
           },
         }
       );
@@ -91,14 +97,19 @@ const VideoUploadScreen = () => {
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity onPress={handleSelectVideo} style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}>
+      <TouchableOpacity
+        onPress={handleSelectVideo}
+        style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
+      >
         <FontAwesome5 style={globalStyle.mh} name='photo-video' size={20} color={Colors.secondary} />
         <Text style={styles.selectBtnText}>Select a video</Text>
       </TouchableOpacity>
+
       {/* get selected video  */}
       <View style={styles.videoBox}>
         <VideoPlayer controls={true} url={videoUrl} />
       </View>
+
       {/* video title  */}
       <View style={{ marginTop: "15%" }}>
         <TextInput
@@ -108,14 +119,18 @@ const VideoUploadScreen = () => {
           onChangeText={setVideoTitle}
         />
       </View>
+
       {/* upload video  */}
-      <TouchableOpacity onPress={handleUploadPost} style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}>
+      <TouchableOpacity
+        onPress={uploadProgress > 0 ? null : handleUploadPost}
+        style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
+      >
         <FeatherIcon style={globalStyle.mh} name='upload-cloud' size={25} color={Colors.secondary} />
-        <Text style={styles.selectBtnText}>Upload</Text>
+        <Text style={styles.selectBtnText}>{uploadProgress > 0 ? `Uploading...${uploadProgress.toFixed(2)}%` : "Upload"}</Text>
       </TouchableOpacity>
 
       {/* progress  */}
-      <View style={[styles.progress, { width: `${uploadProgress * 100}%` }]}></View>
+      <View style={[styles.progress, { width: `${uploadProgress}%` }]}></View>
 
       <CustomFooter />
     </View>
