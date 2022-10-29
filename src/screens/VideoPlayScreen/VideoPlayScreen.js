@@ -7,17 +7,19 @@ import FeatherIcon from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import VideoItem from '../../components/VideoItem'
 import BottomSheets from '../../components/BottomSheets'
-import { DataStore } from 'aws-amplify'
+import { DataStore, Storage } from 'aws-amplify'
 import { Comments, Video } from '../../models'
 import CommentItem from '../../components/CommentItem'
 
 const VideoPlayScreen = ({ route }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
     const videoId = route.params.id
+    const userInfo = route.params.userInfo
     const commentsSheetRef = useRef(null)
 
     const [videoInfo, setVideoInfo] = useState({});
     const [videos, setVideos] = useState([]);
+    const [videoURL, setVideoURL] = useState("");
     const [newComment, setNewComment] = useState("")
     const [comments, setComments] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -27,6 +29,12 @@ const VideoPlayScreen = ({ route }) => {
         DataStore.query(Video).then(setVideos)
         DataStore.query(Video, videoId).then(setVideoInfo)
     }, [videoId])
+
+    const { thumbnail, duration, videoUrl, userID, title, views, likes, createdAt } = videoInfo
+
+    useEffect(() => {
+        Storage.get(videoUrl).then(setVideoURL)
+    }, [videoUrl])
 
     const actionItems = [
         { name: 'Like', icon: 'like1' },
@@ -75,10 +83,14 @@ const VideoPlayScreen = ({ route }) => {
     }
 
     console.log("videoplay screen");
-
+    
     return (
         <View style={styles.container}>
-            <VideoPlayer controls={true} />
+            <VideoPlayer
+                url={videoURL}
+                controls={true}
+                posterURL={thumbnail}
+            />
 
             {/* recommended videos  */}
             <FlatList
@@ -86,8 +98,8 @@ const VideoPlayScreen = ({ route }) => {
                     <>
                         {/* title  */}
                         <View style={[styles.titleContainer, { paddingVertical: 12 }]}>
-                            <Text style={styles.title}>{videoInfo?.title}</Text>
-                            <Text style={styles.subtitle}>200k views - 1mo ago</Text>
+                            <Text style={styles.title}>{title}</Text>
+                            <Text style={styles.subtitle}>{views} views - {createdAt}</Text>
                         </View>
 
                         {/* video action list  */}
@@ -98,6 +110,7 @@ const VideoPlayScreen = ({ route }) => {
                                         key={index}
                                         icon={item.icon}
                                         name={item.name}
+                                        likes={likes}
                                         mp={{ marginHorizontal: 18 }}
                                     />
                                 )}
@@ -107,10 +120,10 @@ const VideoPlayScreen = ({ route }) => {
                         {/* user info  */}
                         <View style={[styles.userInfoConainer, globalStyle.rowCenterBetween]}>
                             <View style={globalStyle.rowCenterBetween}>
-                                <Image style={globalStyle.avatar} source={{ uri: videoInfo?.User?.image }}></Image>
+                                <Image style={globalStyle.avatar} source={{ uri: userInfo?.image }}></Image>
                                 <Pressable style={styles.titleContainer}>
-                                    <Text style={styles.title}>{videoInfo?.User?.name}</Text>
-                                    <Text style={styles.subtitle}>2M subscribers</Text>
+                                    <Text style={styles.title}>{userInfo.name}</Text>
+                                    <Text style={styles.subtitle}>{userInfo.subscribers} subscribers</Text>
                                 </Pressable>
                             </View>
 
@@ -120,12 +133,12 @@ const VideoPlayScreen = ({ route }) => {
                         {/* comments */}
                         <Pressable onPress={() => handleShowComments(1)} style={{ paddingBottom: 12 }}>
                             <View style={[globalStyle.rowCenterBetween, globalStyle.mh]}>
-                                <Text>Comments 228</Text>
+                                <Text>Comments {comments?.length}</Text>
                                 <FeatherIcon name='chevrons-down' size={16} color={Colors.primary} />
                             </View>
                             <View style={[globalStyle.rowCenterBetween, globalStyle.mh, { marginTop: 10 }]}>
-                                <Image style={[globalStyle.miniAvatar]} source={{ uri: videoInfo?.User?.image }}></Image>
-                                <Text style={{ width: "90%", marginLeft: 8 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit]</Text>
+                                <Image style={[globalStyle.miniAvatar]} source={{ uri: userInfo?.image }}></Image>
+                                <Text style={{ width: "90%", marginLeft: 8 }}>{comments[0]?.comment}</Text>
                             </View>
                         </Pressable>
                     </>
@@ -159,7 +172,7 @@ const VideoPlayScreen = ({ route }) => {
                     <FlatList
                         data={comments}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <CommentItem item={item} />}
+                        renderItem={({ item }) => <CommentItem userInfo={userInfo} item={item} />}
                         showsVerticalScrollIndicator={false}
                     />}
             </BottomSheets>

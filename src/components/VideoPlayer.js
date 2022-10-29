@@ -1,9 +1,9 @@
-import { View, StyleSheet, Button, ActivityIndicator, Dimensions,Image } from 'react-native'
+import { View, StyleSheet, Button, ActivityIndicator, Dimensions, Image } from 'react-native'
 import React, { useState, useRef, useEffect, memo } from 'react'
 import Video from 'react-native-video'
 import { createThumbnail } from "react-native-create-thumbnail";
 
-const VideoPlayer = ({ url, height, controls, index, paused }) => {
+const VideoPlayer = ({ url, height, controls, index, paused, posterURL }) => {
   const { width } = Dimensions.get("window")
 
   const videoRef = useRef([]);
@@ -25,7 +25,7 @@ const VideoPlayer = ({ url, height, controls, index, paused }) => {
   }, [url])
 
   // generate thumbnail 
-  
+
 
   console.log(generatePoster);
 
@@ -39,7 +39,7 @@ const VideoPlayer = ({ url, height, controls, index, paused }) => {
         }}
         onLoad={() => setIsLoading(false)}
         repeat={true}
-        poster={generatePoster || "https://posterspy.com/wp-content/uploads/2022/07/dsfgvsdgdrt.jpg"}
+        poster={posterURL ? posterURL : generatePoster}
         ignoreSilentSwitch="ignore"
         posterResizeMode="cover"
         resizeMode="cover"

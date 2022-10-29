@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
-const CommentItem = ({ item }) => {
+const CommentItem = ({ item, userInfo }) => {
     // const { user, createdAt, comment, likes } = item
     const {comment, likes } = item
     const globalStyle = GlobalStyle.useGlobalStyle()
@@ -15,9 +15,9 @@ const CommentItem = ({ item }) => {
             <View style={[globalStyle.rowCenterBetween, globalStyle.mh, { flex: 1 }]}>
 
                 <View style={[globalStyle.rowBetween, { flex: 1 }]}>
-                    {/* <Image style={globalStyle.miniAvatar} source={{ uri: user.image }} /> */}
+                    <Image style={globalStyle.miniAvatar} source={{ uri: userInfo?.image }} />
                     <View style={{ marginLeft: 10, flex: 1 }}>
-                        {/* <Text style={globalStyle.textSmall}>{user.name} - {createdAt}</Text> */}
+                        <Text style={globalStyle.textSmall}>{userInfo?.name} - 1d ago</Text>
                         <Text style={[globalStyle.textRegular, { marginTop: 5 }]}>{comment}</Text>
 
                         <View style={[globalStyle.rowCenterBetween, globalStyle.mv, { width: "30%" }]}>

@@ -4,7 +4,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Colors, GlobalStyle } from '../styles'
 
-const VideoActionItem = ({ icon, name, size, color, mp }) => {
+const VideoActionItem = ({ icon, name, size, color, likes, mp }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
 
     return (
@@ -13,7 +13,7 @@ const VideoActionItem = ({ icon, name, size, color, mp }) => {
             {icon === "share" && <FontAwesome name={icon} size={size || 22} color={color || Colors.primary} />}
             {icon !== "comments" && icon !== "share" ? <AntDesignIcon name={icon} size={size || 22} color={color || Colors.primary} /> : null}
 
-            <Text style={[styles.IconSubtitle, { color: color || Colors.primary }]}>{name}</Text>
+            <Text style={[styles.IconSubtitle, { color: color || Colors.primary }]}>{name === "Like" ? likes : name}</Text>
         </View>
     )
 }

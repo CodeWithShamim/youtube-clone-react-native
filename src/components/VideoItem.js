@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Colors, GlobalStyle } from '../styles'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from '@react-navigation/native'
+import thumbnailDefault from "../assets/images/placeholder.jpeg"
 import { Storage, DataStore } from 'aws-amplify'
 import { User } from '../models'
 
@@ -14,23 +15,27 @@ const VideoItem = ({ item }) => {
     const [userInfo, setUserInfo] = useState({})
 
     const handlePlayVideo = (id) => {
-        navigation.navigate("VideoPlay", { id: id })
+        navigation.navigate("VideoPlay", { id, userInfo })
     }
 
-    const { thumbnail, duration, userID, title, views, createdAt } = item
+    const { id, thumbnail, duration, userID, title, views, createdAt } = item
 
     useEffect(() => {
         Storage.get(thumbnail).then(setThumbnailURL)
         DataStore.query(User, userID).then(setUserInfo)
     }, [thumbnail])
 
-    console.log("userInfo", userInfo);
-
     return (
         <View style={styles.root}>
             {/* thumbnail */}
-            <Pressable onPress={() => handlePlayVideo(item.id)}>
-                <Image style={styles.thumbnail} source={{ uri: thumbnailURL }}></Image>
+            <Pressable onPress={() => handlePlayVideo(id)}>
+                {thumbnailURL &&
+                    <Image
+                        style={styles.thumbnail}
+                        defaultSource={thumbnailDefault}
+                        source={{ uri: thumbnailURL }}
+                    />
+                }
                 <Text style={styles.time}>{duration}</Text>
             </Pressable>
 
