@@ -8,9 +8,11 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import VideoPlayer from '../../components/VideoPlayer'
 import "react-native-get-random-values"
 import { v4 as uuidv4 } from 'uuid';
-import { Storage } from 'aws-amplify'
+import { Storage, Auth, DataStore } from 'aws-amplify'
+import { User, Video } from '../../models'
+import { createThumbnail } from 'react-native-create-thumbnail'
 
-const VideoUploadScreen = () => {
+const VideoUploadScreen = ({ navigation }) => {
   const globalStyle = GlobalStyle.useGlobalStyle()
   const [videoUrl, setVideoUrl] = useState("")
   const [videoDuration, setVideoDuration] = useState(0)
@@ -58,39 +60,93 @@ const VideoUploadScreen = () => {
     }
   }
 
+  // generate thumbnail 
+  const generateThumbnail = async () => {
+    if (!videoUrl) return Alert.alert("Warning!", "Please select a video")
+    const thumbnailURL = await createThumbnail({ url: videoUrl, timeStamp: 10000 })
+
+    try {
+      const response = await fetch(thumbnailURL?.path)
+      const blob = await response.blob()
+      const fileKey = `${uuidv4()}.jpg`
+      await Storage.put(fileKey, blob)
+      return fileKey
+    } catch (error) {
+      console.log("Upload error", error)
+      Alert.alert("Error!", error.message)
+      setUploadProgress(0);
+    }
+  }
+
   // upload video 
   const handleUploadVideo = async () => {
     if (!videoUrl) {
       return Alert.alert("Warning!", "Please select a video")
     }
-
     if (videoDuration > 120) return Alert.alert("Sorry!", "This video is too long. video duration can't be up 120s")
 
     try {
       const response = await fetch(videoUrl)
       const blob = await response.blob()
       const fileKey = `${uuidv4()}.mp4`
-      const result = await Storage.put(fileKey, blob,
+      await Storage.put(fileKey, blob,
         {
           progressCallback: (p) => {
             const progress = (p.loaded / p.total) * 100
             setUploadProgress(progress)
           },
         }
-      );
-      console.log("Result", result);
+      )
       return fileKey
     } catch (error) {
       console.log("Upload error", error)
       Alert.alert("Error!", error.message)
+      setUploadProgress(0);
     }
   }
 
-  // upload post 
+  // ---------------upload post ------------------
   const handleUploadPost = async () => {
-    const fileKey = await handleUploadVideo()
-    console.log(fileKey);
-    setUploadProgress(0)
+    if (!videoTitle) return Alert.alert("Warning!", "Title is missing..")
+    const videoKey = await handleUploadVideo()
+    const thumbnailKey = await generateThumbnail()
+
+    console.log("videoKey", videoKey);
+    console.log("thumbnailKey", thumbnailKey);
+
+    const userInfo = await Auth.currentAuthenticatedUser();
+    const userSub = userInfo.attributes.sub;
+    const user = (await DataStore.query(User)).find((u) => u.sub === userSub);
+
+    if (!user || !videoKey || !thumbnailKey) return Alert.alert("Error!", "User not find.")
+
+    try {
+      await DataStore.save(
+        new Video({
+          // createdAt: new Date(),
+          title: videoTitle,
+          thumbnail: thumbnailKey,
+          videoUrl: videoKey,
+          duration: `"${videoDuration}"`,
+          views: 0,
+          likes: 0,
+          dislikes: 0,
+          userID: user?.id,
+        })
+      );
+
+    } catch (error) {
+      console.log("Video post error", error.message)
+      Alert.alert(error.message)
+      setUploadProgress(0);
+    }
+
+    setVideoDuration(0);
+    setVideoTitle("");
+    setUploadProgress(0);
+
+    navigation.push("Home");
+
 
   }
 

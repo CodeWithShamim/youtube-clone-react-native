@@ -134,7 +134,7 @@ export const schema = {
                 "duration": {
                     "name": "duration",
                     "isArray": false,
-                    "type": "Float",
+                    "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -172,6 +172,27 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": "videoID"
                     }
+                },
+                "likes": {
+                    "name": "likes",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "dislikes": {
+                    "name": "dislikes",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "updatedAt": {
                     "name": "updatedAt",
@@ -353,5 +374,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "2ef28075d3ead02fc9371de91374e4a9"
+    "version": "a1dfb0653804e0627fe86d87af6af3bb"
 };

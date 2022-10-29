@@ -19,7 +19,7 @@ const CustomFooter = () => {
     ]
 
     const handleNavigate = (tab) => {
-        navigation.navigate(tab.screen || "Home")
+        navigation.push(tab.screen || "Home")
     }
 
     return (

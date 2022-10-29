@@ -31,10 +31,13 @@ export declare class Video {
   readonly title: string;
   readonly thumbnail: string;
   readonly videoUrl: string;
-  readonly duration: number;
+  readonly duration: string;
   readonly views: number;
   readonly User?: User | null;
   readonly Comments?: (Comments | null)[] | null;
+  readonly likes: number;
+  readonly dislikes: number;
+  readonly userID: string;
   readonly updatedAt?: string | null;
   readonly videoUserId?: string | null;
   constructor(init: ModelInit<Video, VideoMetaData>);
