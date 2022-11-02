@@ -15,7 +15,7 @@ const CustomFooter = () => {
         {name: 'Shorts', screen: 'ShortsVideo', icon: 'youtube' },
         {name: 'Plus', screen: 'VideoUpload', icon: 'plus-circle' },
         {name: 'Subscriptions', screen: '', icon: 'package' },
-        {name: 'Library', screen: '', icon: 'video' },
+        {name: 'Library', screen: 'Library', icon: 'video' },
     ]
 
     const handleNavigate = (tab) => {

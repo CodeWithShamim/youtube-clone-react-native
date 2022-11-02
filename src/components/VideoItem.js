@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { Colors, GlobalStyle } from '../styles'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from '@react-navigation/native'
-import thumbnailDefault from "../assets/images/placeholder.jpeg"
+import defaultThumbnail from "../assets/images/placeholder.jpeg"
 import { Storage, DataStore } from 'aws-amplify'
 import { User } from '../models'
+import ImageLoad from 'react-native-image-placeholder'
 
 const VideoItem = ({ item }) => {
 
@@ -23,19 +24,19 @@ const VideoItem = ({ item }) => {
     useEffect(() => {
         Storage.get(thumbnail).then(setThumbnailURL)
         DataStore.query(User, userID).then(setUserInfo)
-    }, [thumbnail])
+    }, [thumbnail, userID])
 
     return (
         <View style={styles.root}>
             {/* thumbnail */}
             <Pressable onPress={() => handlePlayVideo(id)}>
-                {thumbnailURL &&
-                    <Image
-                        style={styles.thumbnail}
-                        defaultSource={thumbnailDefault}
-                        source={{ uri: thumbnailURL }}
-                    />
-                }
+                <ImageLoad
+                    style={styles.thumbnail}
+                    placeholderSource={defaultThumbnail}
+                    placeholderStyle={styles.thumbnail}
+                    loadingStyle={{ size: 'large', color: 'blue' }}
+                    source={thumbnailURL && { uri: thumbnailURL }}
+                />
                 <Text style={styles.time}>{duration}</Text>
             </Pressable>
 

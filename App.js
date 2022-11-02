@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from './src/screens/HomeScreen'
 import VideoPlayScreen from './src/screens/VideoPlayScreen'
 import ShortsVideoScreen from './src/screens/ShortsVideoScreen'
+import LibraryScreen from './src/screens/LibraryScreen'
 import { withAuthenticator } from "aws-amplify-react-native";
 import VideoUploadScreen from './src/screens/VideoUploadScreen'
 import { Auth, DataStore } from 'aws-amplify'
@@ -40,6 +41,7 @@ const App = () => {
         <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
         <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
         <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
+        <Stack.Screen name='Library' component={LibraryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -122,8 +122,8 @@ const VideoPlayScreen = ({ route }) => {
                             <View style={globalStyle.rowCenterBetween}>
                                 <Image style={globalStyle.avatar} source={{ uri: userInfo?.image }}></Image>
                                 <Pressable style={styles.titleContainer}>
-                                    <Text style={styles.title}>{userInfo.name}</Text>
-                                    <Text style={styles.subtitle}>{userInfo.subscribers} subscribers</Text>
+                                    <Text style={styles.title}>{userInfo?.name}</Text>
+                                    <Text style={styles.subtitle}>{userInfo?.subscribers} subscribers</Text>
                                 </Pressable>
                             </View>
 

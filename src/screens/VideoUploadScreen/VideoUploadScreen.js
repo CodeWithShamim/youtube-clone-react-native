@@ -87,6 +87,7 @@ const VideoUploadScreen = ({ navigation }) => {
 
     try {
       const response = await fetch(videoUrl)
+      console.log("response response response", response);
       const blob = await response.blob()
       const fileKey = `${uuidv4()}.mp4`
       await Storage.put(fileKey, blob,
