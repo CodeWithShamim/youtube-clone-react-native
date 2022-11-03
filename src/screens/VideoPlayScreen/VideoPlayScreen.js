@@ -24,6 +24,7 @@ const VideoPlayScreen = ({ route }) => {
     const [newComment, setNewComment] = useState("")
     const [comments, setComments] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [commentAddLoading, setCommentAddLoading] = useState(false)
 
     // fetch videos 
     useEffect(() => {
@@ -63,7 +64,7 @@ const VideoPlayScreen = ({ route }) => {
     // send comment 
     const handleSendComment = async () => {
         if (!newComment) return Alert.alert("Please!", "Add a comment")
-        setIsLoading(true)
+        setCommentAddLoading(true)
         setNewComment("")
 
         try {
@@ -75,10 +76,10 @@ const VideoPlayScreen = ({ route }) => {
             }))
             if (res?.comment) {
                 setComments((preComments) => [{ comment: res.comment }, ...preComments])
-                setIsLoading(false)
+                setCommentAddLoading(false)
             }
         } catch (error) {
-            setIsLoading(false)
+            setCommentAddLoading(false)
             console.warn(error.message)
         }
     }
@@ -171,7 +172,7 @@ const VideoPlayScreen = ({ route }) => {
                     </View>
 
                     {/* comments  */}
-                    {isLoading ?
+                    {commentAddLoading ?
                         <View style={{ paddingTop: 30 }}>
                             <ActivityIndicator size="large" color={Colors.primary} />
                         </View> :

@@ -7,6 +7,7 @@ import VideoActionItem from '../../components/VideoActionItem'
 import LinearGradient from 'react-native-linear-gradient'
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import InnerLayer from '../../components/InnerLayer'
+import SkullLayer from '../../components/SkullLayer'
 
 const ShortsVideoScreen = () => {
     const globalStyle = GlobalStyle.useGlobalStyle()

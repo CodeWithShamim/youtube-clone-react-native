@@ -21,7 +21,7 @@ const HomeScreen = () => {
             // return false
         }
         console.log("Load homeScreen data");
-        setVideos(result)
+        setVideos(result.reverse())
         setIsLoading(false)
     }
 

@@ -17,7 +17,7 @@ const SkullLayer = ({ loading, children, count, padding }, ref) => {
                     <ScrollView style={{ paddingHorizontal: padding }} showsVerticalScrollIndicator={false}>
                         <SkeletonPlaceholder>
                             {_.times((count ? count : 5)).map((index) =>
-                                <View key={index} style={{ marginVertical: 10 }} >
+                                <View key={index}>
                                     <View style={{ height: 180, borderRadius: 4, marginVertical: 2 }} />
 
                                     <View style={[globalStyle.rowCenterCenter, { marginVertical: 10 }]}>

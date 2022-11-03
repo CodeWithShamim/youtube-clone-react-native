@@ -9,30 +9,6 @@ const LibraryScreen = () => {
     const { width, height } = Dimensions.get("window")
     const [url, setUrl] = useState("")
 
-    function b64toBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-
-        var byteCharacters = b64Data
-        var byteArrays = [];
-
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-
-            var byteArray = new Uint8Array(byteNumbers);
-
-            byteArrays.push(byteArray);
-        }
-
-        var blob = new Blob(byteArrays, { type: contentType });
-        return blob;
-    }
-
     const handleDownload = async () => {
         console.log("Hit");
         try {
@@ -47,9 +23,7 @@ const LibraryScreen = () => {
             reader.readAsDataURL(result.Body)
             reader.onloadend = () => {
                 const base64 = reader.result
-                const blob = b64toBlob(base64)
-                console.log("blob", blob);
-                setUrl(blob)
+                setUrl(base64)
             }
 
         } catch (error) {
