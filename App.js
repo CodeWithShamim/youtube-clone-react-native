@@ -9,6 +9,9 @@ import { withAuthenticator } from "aws-amplify-react-native";
 import VideoUploadScreen from './src/screens/VideoUploadScreen'
 import { Auth, DataStore } from 'aws-amplify'
 import { User } from './src/models'
+import { StripeProvider } from '@stripe/stripe-react-native'
+import { P_K } from '@env'
+import MemberShips from './src/screens/MemberShips'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -35,15 +38,19 @@ const App = () => {
   }, [])
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Home' component={HomeScreen} />
-        <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
-        <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
-        <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
-        <Stack.Screen name='Library' component={LibraryScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <StripeProvider publishableKey={P_K}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
+          <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
+          <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
+          <Stack.Screen name='MemberShips' component={MemberShips} />
+          <Stack.Screen name='Library' component={LibraryScreen} />
+        </Stack.Navigator>
+      </NavigationContainer >
+    </StripeProvider>
+
   )
 }
 

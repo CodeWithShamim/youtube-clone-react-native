@@ -14,7 +14,7 @@ const CustomFooter = () => {
         {name: 'Home', screen: 'Home', icon: 'home' },
         {name: 'Shorts', screen: 'ShortsVideo', icon: 'youtube' },
         {name: 'Plus', screen: 'VideoUpload', icon: 'plus-circle' },
-        {name: 'Subscriptions', screen: '', icon: 'package' },
+        {name: 'MemberShips', screen: 'MemberShips', icon: 'package' },
         {name: 'Library', screen: 'Library', icon: 'video' },
     ]
 
