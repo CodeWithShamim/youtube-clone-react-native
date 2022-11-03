@@ -35,10 +35,11 @@ const VideoPlayer = ({ url, height, controls, index, paused, posterURL }) => {
         ref={videoRef}
         style={[styles.video, height ? { height: height } : { aspectRatio: 16 / 9 }]}
         source={{
-          uri: url || "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          uri: url,
         }}
         onLoad={() => setIsLoading(false)}
         repeat={true}
+        onError={() => setIsLoading(false)}
         poster={posterURL ? posterURL : generatePoster}
         ignoreSilentSwitch="ignore"
         posterResizeMode="cover"

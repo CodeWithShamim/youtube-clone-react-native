@@ -1,9 +1,8 @@
-import { View, StyleSheet, Dimensions, Button, Pressable, Image } from 'react-native'
+import { View, StyleSheet, Dimensions, Button, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import CustomFooter from '../../components/CustomFooter'
 import VideoPlayer from '../../components/VideoPlayer'
 import { Storage } from 'aws-amplify'
-import RNFS from 'react-native-fs'
+import InnerLayer from '../../components/InnerLayer'
 
 const LibraryScreen = () => {
 
@@ -13,26 +12,26 @@ const LibraryScreen = () => {
     function b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
-      
+
         var byteCharacters = b64Data
         var byteArrays = [];
-      
+
         for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-          var slice = byteCharacters.slice(offset, offset + sliceSize);
-      
-          var byteNumbers = new Array(slice.length);
-          for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-          }
-      
-          var byteArray = new Uint8Array(byteNumbers);
-      
-          byteArrays.push(byteArray);
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
         }
-      
-        var blob = new Blob(byteArrays, {type: contentType});
+
+        var blob = new Blob(byteArrays, { type: contentType });
         return blob;
-      }
+    }
 
     const handleDownload = async () => {
         console.log("Hit");
@@ -62,24 +61,23 @@ const LibraryScreen = () => {
     console.log("url", url);
 
     return (
-        <View style={styles.container}>
-            <View style={[{ width: width }]}>
-                {url && <VideoPlayer controls={true} url={url} />}
+        <InnerLayer header={true} footer={true}>
+            <View>
+                <View style={[{ width: width }]}>
+                    {url && <VideoPlayer controls={true} url={url} />}
+                </View>
+
+                <Button title='Download' onPress={handleDownload} />
+                {/* <Image style={{ width: "100%", height: 200 }} source={{ uri: url || "https://static.vecteezy.com/packs/media/vectors/term-bg-1-666de2d9.jpg" }} /> */}
             </View>
-
-            <Button title='Download' onPress={handleDownload} />
-            {/* <Image style={{ width: "100%", height: 200 }} source={{ uri: url || "https://static.vecteezy.com/packs/media/vectors/term-bg-1-666de2d9.jpg" }} /> */}
-
-
-            <CustomFooter />
-        </View>
+        </InnerLayer>
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        height: "100%",
-    },
-})
+// const styles = StyleSheet.create({
+//     container: {
+//         height: "100%",
+//     },
+// })
 
 export default LibraryScreen

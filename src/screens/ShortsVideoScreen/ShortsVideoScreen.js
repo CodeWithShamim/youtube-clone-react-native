@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import React, { memo, useState } from 'react'
-import CustomFooter from '../../components/CustomFooter'
 import VideoPlayer from '../../components/VideoPlayer'
 import { Colors, GlobalStyle } from '../../styles'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import VideoActionItem from '../../components/VideoActionItem'
 import LinearGradient from 'react-native-linear-gradient'
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import InnerLayer from '../../components/InnerLayer'
 
 const ShortsVideoScreen = () => {
     const globalStyle = GlobalStyle.useGlobalStyle()
@@ -42,80 +42,80 @@ const ShortsVideoScreen = () => {
     console.log(currentIndex);
 
     return (
-        <View style={styles.container}>
-            <SwiperFlatList
-                index={0}
-                vertical={true}
-                data={shorts}
-                onChangeIndex={(i) => setCurrentIndex(i)}
-                renderAll={true}
-                renderItem={({ item, index }) => (
-                    <>
-                        <View style={styles.videoPlayer}>
-                            <VideoPlayer
-                                url={item.sources}
-                                height="96%"
-                                controls={false}
-                                index={currentIndex}
-                                paused={index !== currentIndex.index ? true : false} />
-                        </View>
-
-                        <LinearGradient
-                            colors={["rgba(0,0,0,0.1)", "rgba(0,0,0, 0.5)"]}
-                            style={{ width, height: height * 97 / 100 }}
-                        >
-                            {/* header icon  */}
-                            <View style={styles.headerIcon}>
-                                <AntDesignIcon
-                                    style={{ marginRight: "8%" }}
-                                    name='search1' size={25}
-                                    color={Colors.secondary} />
-                                <AntDesignIcon
-                                    name='camerao'
-                                    size={25}
-                                    color={Colors.secondary} />
+        <InnerLayer footer={true}>
+            <View style={styles.container}>
+                <SwiperFlatList
+                    index={0}
+                    vertical={true}
+                    data={shorts}
+                    onChangeIndex={(i) => setCurrentIndex(i)}
+                    renderAll={true}
+                    renderItem={({ item, index }) => (
+                        <>
+                            <View style={styles.videoPlayer}>
+                                <VideoPlayer
+                                    url={item.sources}
+                                    height="96%"
+                                    controls={false}
+                                    index={currentIndex}
+                                    paused={index !== currentIndex.index ? true : false} />
                             </View>
 
-                            <View style={styles.userInfoContainer}>
-                                <Text style={styles.title}>Using the styles from above, set start and end like this to make the gradient</Text>
-                                {/* use info  */}
-                                <View style={[globalStyle.row, { alignItems: "center", marginTop: 10 }]}>
-                                    <Image
-                                        source={{ uri: "https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg" }}
-                                        resizeMode="cover"
-                                        style={globalStyle.avatar}
-                                    />
-                                    <Text style={styles.username}>John smith</Text>
-                                    <Text style={styles.subscribeBtn}>Subscribe</Text>
+                            <LinearGradient
+                                colors={["rgba(0,0,0,0.1)", "rgba(0,0,0, 0.5)"]}
+                                style={{ width, height: height * 97 / 100 }}
+                            >
+                                {/* header icon  */}
+                                <View style={styles.headerIcon}>
+                                    <AntDesignIcon
+                                        style={{ marginRight: "8%" }}
+                                        name='search1' size={25}
+                                        color={Colors.secondary} />
+                                    <AntDesignIcon
+                                        name='camerao'
+                                        size={25}
+                                        color={Colors.secondary} />
                                 </View>
-                            </View>
 
-                            {/* video action items  */}
-                            <View style={styles.actionContainer}>
-                                {actionItems.map((item, index) =>
-                                    <VideoActionItem
-                                        key={index}
-                                        icon={item.icon}
-                                        name={item.name}
-                                        size={28}
-                                        color={Colors.secondary}
-                                        mp={{ marginVertical: 10 }}
-                                    />
-                                )}
-                            </View>
-                        </LinearGradient>
-                    </>
-                )}
-            />
+                                <View style={styles.userInfoContainer}>
+                                    <Text style={styles.title}>Using the styles from above, set start and end like this to make the gradient</Text>
+                                    {/* use info  */}
+                                    <View style={[globalStyle.row, { alignItems: "center", marginTop: 10 }]}>
+                                        <Image
+                                            source={{ uri: "https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg" }}
+                                            resizeMode="cover"
+                                            style={globalStyle.avatar}
+                                        />
+                                        <Text style={styles.username}>John smith</Text>
+                                        <Text style={styles.subscribeBtn}>Subscribe</Text>
+                                    </View>
+                                </View>
 
-            <CustomFooter />
-        </View>
+                                {/* video action items  */}
+                                <View style={styles.actionContainer}>
+                                    {actionItems.map((item, index) =>
+                                        <VideoActionItem
+                                            key={index}
+                                            icon={item.icon}
+                                            name={item.name}
+                                            size={28}
+                                            color={Colors.secondary}
+                                            mp={{ marginVertical: 10 }}
+                                        />
+                                    )}
+                                </View>
+                            </LinearGradient>
+                        </>
+                    )}
+                />
+            </View>
+        </InnerLayer>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: Colors.primary,
     },
     videoPlayer: {

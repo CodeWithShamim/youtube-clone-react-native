@@ -10,6 +10,7 @@ import BottomSheets from '../../components/BottomSheets'
 import { DataStore, Storage } from 'aws-amplify'
 import { Comments, Video } from '../../models'
 import CommentItem from '../../components/CommentItem'
+import InnerLayer from '../../components/InnerLayer'
 
 const VideoPlayScreen = ({ route }) => {
     const globalStyle = GlobalStyle.useGlobalStyle()
@@ -83,107 +84,113 @@ const VideoPlayScreen = ({ route }) => {
     }
 
     console.log("videoplay screen");
-    
+
     return (
-        <View style={styles.container}>
-            <VideoPlayer
-                url={videoURL}
-                controls={true}
-                posterURL={thumbnail}
-            />
-
-            {/* recommended videos  */}
-            <FlatList
-                ListHeaderComponent={() =>
-                    <>
-                        {/* title  */}
-                        <View style={[styles.titleContainer, { paddingVertical: 12 }]}>
-                            <Text style={styles.title}>{title}</Text>
-                            <Text style={styles.subtitle}>{views} views - {createdAt}</Text>
-                        </View>
-
-                        {/* video action list  */}
-                        <View>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                {actionItems.map((item, index) =>
-                                    <VideoActionItem
-                                        key={index}
-                                        icon={item.icon}
-                                        name={item.name}
-                                        likes={likes}
-                                        mp={{ marginHorizontal: 18 }}
-                                    />
-                                )}
-                            </ScrollView>
-                        </View>
-
-                        {/* user info  */}
-                        <View style={[styles.userInfoConainer, globalStyle.rowCenterBetween]}>
-                            <View style={globalStyle.rowCenterBetween}>
-                                <Image style={globalStyle.avatar} source={{ uri: userInfo?.image }}></Image>
-                                <Pressable style={styles.titleContainer}>
-                                    <Text style={styles.title}>{userInfo?.name}</Text>
-                                    <Text style={styles.subtitle}>{userInfo?.subscribers} subscribers</Text>
-                                </Pressable>
-                            </View>
-
-                            <Text style={styles.subscribe}>Subscribe</Text>
-                        </View>
-
-                        {/* comments */}
-                        <Pressable onPress={() => handleShowComments(1)} style={{ paddingBottom: 12 }}>
-                            <View style={[globalStyle.rowCenterBetween, globalStyle.mh]}>
-                                <Text>Comments {comments?.length}</Text>
-                                <FeatherIcon name='chevrons-down' size={16} color={Colors.primary} />
-                            </View>
-                            <View style={[globalStyle.rowCenterBetween, globalStyle.mh, { marginTop: 10 }]}>
-                                <Image style={[globalStyle.miniAvatar]} source={{ uri: userInfo?.image }}></Image>
-                                <Text style={{ width: "90%", marginLeft: 8 }}>{comments[0]?.comment}</Text>
-                            </View>
-                        </Pressable>
-                    </>
+        <InnerLayer loading={isLoading}>
+            <>
+                {
+                videoURL && <VideoPlayer
+                    url={videoURL}
+                    controls={true}
+                    posterURL={thumbnail}
+                />
                 }
-                data={videos?.reverse()}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <VideoItem item={item} />}
-                showsVerticalScrollIndicator={false}
-            />
 
-            {/* bottom sheet  */}
-            <BottomSheets ref={commentsSheetRef} sheetTitle="Comments" commentsSheetRef={commentsSheetRef}>
-                {/* comment box  */}
-                <View style={[globalStyle.rowCenterBetween, styles.commentsBox]}>
-                    <TextInput
-                        placeholder='Add a comments...'
-                        placeholderTextColor="gray"
-                        value={newComment}
-                        onChangeText={(value) => setNewComment(value)}
-                    />
-                    <Pressable onPress={handleSendComment}>
-                        <MaterialCommunityIcons name='send' size={20} color={Colors.primary} />
-                    </Pressable>
-                </View>
+                {/* recommended videos  */}
+                <FlatList
+                    ListHeaderComponent={() =>
+                        <>
+                            {/* title  */}
+                            <View style={[styles.titleContainer, { paddingVertical: 12 }]}>
+                                <Text style={styles.title}>{title}</Text>
+                                <Text style={styles.subtitle}>{views} views - {createdAt}</Text>
+                            </View>
 
-                {/* comments  */}
-                {isLoading ?
-                    <View style={{ paddingTop: 30 }}>
-                        <ActivityIndicator size="large" color={Colors.primary} />
-                    </View> :
-                    <FlatList
-                        data={comments}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <CommentItem userInfo={userInfo} item={item} />}
-                        showsVerticalScrollIndicator={false}
-                    />}
-            </BottomSheets>
-        </View>
+                            {/* video action list  */}
+                            <View>
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                    {actionItems.map((item, index) =>
+                                        <VideoActionItem
+                                            key={index}
+                                            icon={item.icon}
+                                            name={item.name}
+                                            likes={likes}
+                                            mp={{ marginHorizontal: 18 }}
+                                        />
+                                    )}
+                                </ScrollView>
+                            </View>
+
+                            {/* user info  */}
+                            <View style={[styles.userInfoConainer, globalStyle.rowCenterBetween]}>
+                                <View style={globalStyle.rowCenterBetween}>
+
+                                    {userInfo?.image && <Image style={globalStyle.avatar} source={{ uri: userInfo?.image }}></Image>}
+                                    <Pressable style={styles.titleContainer}>
+                                        <Text style={styles.title}>{userInfo?.name}</Text>
+                                        <Text style={styles.subtitle}>{userInfo?.subscribers} subscribers</Text>
+                                    </Pressable>
+                                </View>
+
+                                <Text style={styles.subscribe}>Subscribe</Text>
+                            </View>
+
+                            {/* comments */}
+                            <Pressable onPress={() => handleShowComments(1)} style={{ paddingBottom: 12 }}>
+                                <View style={[globalStyle.rowCenterBetween, globalStyle.mh]}>
+                                    <Text>Comments {comments?.length}</Text>
+                                    <FeatherIcon name='chevrons-down' size={16} color={Colors.primary} />
+                                </View>
+                                <View style={[globalStyle.rowCenterBetween, globalStyle.mh, { marginTop: 10 }]}>
+
+                                    {userInfo?.image && <Image style={[globalStyle.miniAvatar]} source={{ uri: userInfo?.image }}></Image>}
+                                    <Text style={{ width: "90%", marginLeft: 8 }}>{comments[0]?.comment}</Text>
+                                </View>
+                            </Pressable>
+                        </>
+                    }
+                    data={videos?.reverse()}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <VideoItem item={item} />}
+                    showsVerticalScrollIndicator={false}
+                />
+
+                {/* bottom sheet  */}
+                <BottomSheets ref={commentsSheetRef} sheetTitle="Comments" commentsSheetRef={commentsSheetRef}>
+                    {/* comment box  */}
+                    <View style={[globalStyle.rowCenterBetween, styles.commentsBox]}>
+                        <TextInput
+                            placeholder='Add a comments...'
+                            placeholderTextColor="gray"
+                            value={newComment}
+                            onChangeText={(value) => setNewComment(value)}
+                        />
+                        <Pressable onPress={handleSendComment}>
+                            <MaterialCommunityIcons name='send' size={20} color={Colors.primary} />
+                        </Pressable>
+                    </View>
+
+                    {/* comments  */}
+                    {isLoading ?
+                        <View style={{ paddingTop: 30 }}>
+                            <ActivityIndicator size="large" color={Colors.primary} />
+                        </View> :
+                        <FlatList
+                            data={comments}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => <CommentItem userInfo={userInfo} item={item} />}
+                            showsVerticalScrollIndicator={false}
+                        />}
+                </BottomSheets>
+            </>
+        </InnerLayer>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+    // container: {
+    //     flex: 1,
+    // },
 
     titleContainer: {
         paddingHorizontal: 8,

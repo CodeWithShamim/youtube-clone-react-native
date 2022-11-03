@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet, Button, TouchableOpacity, TextInput, Platform, PermissionsAndroid, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform, PermissionsAndroid, Alert } from 'react-native'
 import React, { useState } from 'react'
-import CustomFooter from '../../components/CustomFooter'
 import { Colors, GlobalStyle } from '../../styles'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -11,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Storage, Auth, DataStore } from 'aws-amplify'
 import { User, Video } from '../../models'
 import { createThumbnail } from 'react-native-create-thumbnail'
+import InnerLayer from '../../components/InnerLayer'
 
 const VideoUploadScreen = ({ navigation }) => {
   const globalStyle = GlobalStyle.useGlobalStyle()
@@ -152,52 +152,52 @@ const VideoUploadScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <InnerLayer footer={true}>
+      <>
+        <TouchableOpacity
+          onPress={handleSelectVideo}
+          style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
+        >
+          <FontAwesome5 style={globalStyle.mh} name='photo-video' size={20} color={Colors.secondary} />
+          <Text style={styles.selectBtnText}>Select a video</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={handleSelectVideo}
-        style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
-      >
-        <FontAwesome5 style={globalStyle.mh} name='photo-video' size={20} color={Colors.secondary} />
-        <Text style={styles.selectBtnText}>Select a video</Text>
-      </TouchableOpacity>
+        {/* get selected video  */}
+        <View style={styles.videoBox}>
+          {videoUrl && <VideoPlayer controls={true} url={videoUrl} />}
+        </View>
 
-      {/* get selected video  */}
-      <View style={styles.videoBox}>
-        <VideoPlayer controls={true} url={videoUrl} />
-      </View>
+        {/* video title  */}
+        <View style={{ marginTop: "15%" }}>
+          <TextInput
+            style={styles.videoTitle}
+            placeholder='video title'
+            value={videoTitle}
+            onChangeText={setVideoTitle}
+          />
+        </View>
 
-      {/* video title  */}
-      <View style={{ marginTop: "15%" }}>
-        <TextInput
-          style={styles.videoTitle}
-          placeholder='video title'
-          value={videoTitle}
-          onChangeText={setVideoTitle}
-        />
-      </View>
+        {/* upload video  */}
+        <TouchableOpacity
+          onPress={uploadProgress > 0 ? null : handleUploadPost}
+          style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
+        >
+          <FeatherIcon style={globalStyle.mh} name='upload-cloud' size={25} color={Colors.secondary} />
+          <Text style={styles.selectBtnText}>{uploadProgress > 0 ? `Uploading...${uploadProgress.toFixed(2)}%` : "Upload"}</Text>
+        </TouchableOpacity>
 
-      {/* upload video  */}
-      <TouchableOpacity
-        onPress={uploadProgress > 0 ? null : handleUploadPost}
-        style={[styles.selectBtnContainer, globalStyle.rowCenterCenter, globalStyle.mv]}
-      >
-        <FeatherIcon style={globalStyle.mh} name='upload-cloud' size={25} color={Colors.secondary} />
-        <Text style={styles.selectBtnText}>{uploadProgress > 0 ? `Uploading...${uploadProgress.toFixed(2)}%` : "Upload"}</Text>
-      </TouchableOpacity>
+        {/* progress  */}
+        <View style={[styles.progress, { width: `${uploadProgress}%` }]}></View>
 
-      {/* progress  */}
-      <View style={[styles.progress, { width: `${uploadProgress}%` }]}></View>
-
-      <CustomFooter />
-    </View>
+      </>
+    </InnerLayer>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: "100%"
-  },
+  // container: {
+  //   height: "100%"
+  // },
   selectBtnContainer: {
     backgroundColor: Colors.primary,
     width: "100%",
@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     alignSelf: "center",
     borderRadius: 5,
+    backgroundColor: Colors.primary,
   },
   videoTitle: {
     width: "95%",
