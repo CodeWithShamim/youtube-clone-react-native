@@ -12,20 +12,27 @@ const HomeScreen = () => {
 
     const { height } = Dimensions.get("window")
 
-    useEffect(() => {
+    // fetch video 
+    const fetchVideos = async () => {
         setIsLoading(true)
-        const fetchVideos = async () => {
-            const result = await DataStore.query(Video)
-            if (result.length <= 0) {
-                fetchVideos()
-                // return false
-            }
-            console.log("Load homeScreen data");
-            setVideos(result)
-            setIsLoading(false)
+        const result = await DataStore.query(Video)
+        if (result.length <= 0) {
+            fetchVideos()
+            // return false
         }
+        console.log("Load homeScreen data");
+        setVideos(result)
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
         fetchVideos()
     }, [])
+
+    // pull to refresh 
+    const handleLoadData = () => {
+        fetchVideos()
+    }
 
     return (
         <InnerLayer header={true} footer={true} loading={isLoading}>
@@ -36,6 +43,8 @@ const HomeScreen = () => {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => <VideoItem item={item} />}
                     showsVerticalScrollIndicator={false}
+                    refreshing={isLoading}
+                    onRefresh={handleLoadData}
                 />
             </View>
         </InnerLayer>
