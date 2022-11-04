@@ -12,6 +12,7 @@ import { User } from './src/models'
 import { StripeProvider } from '@stripe/stripe-react-native'
 import { P_K } from '@env'
 import MemberShips from './src/screens/MemberShips'
+import ThemeProvider from './src/store/context'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -39,16 +40,18 @@ const App = () => {
 
   return (
     <StripeProvider publishableKey={P_K}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
-          <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
-          <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
-          <Stack.Screen name='MemberShips' component={MemberShips} />
-          <Stack.Screen name='Library' component={LibraryScreen} />
-        </Stack.Navigator>
-      </NavigationContainer >
+      <ThemeProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='Home' component={HomeScreen} />
+            <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
+            <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
+            <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
+            <Stack.Screen name='MemberShips' component={MemberShips} />
+            <Stack.Screen name='Library' component={LibraryScreen} />
+          </Stack.Navigator>
+        </NavigationContainer >
+      </ThemeProvider>
     </StripeProvider>
 
   )

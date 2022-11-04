@@ -1,14 +1,16 @@
-import { View, Text, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, Image, StyleSheet, Switch } from 'react-native'
+import React, { useContext, useState } from 'react'
 import logo from '../assets/images/logo.png'
 import { Colors, GlobalStyle } from '../styles'
 import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Auth } from 'aws-amplify'
+import { ThemeContext } from '../store/context'
 
 const CustomHeader = () => {
-    const globalStyle = GlobalStyle.useGlobalStyle();
+    const { theme, handleTheme } = useContext(ThemeContext)
+    const globalStyle = GlobalStyle.useGlobalStyle()
 
     const handleSignOut = () => {
         Auth.signOut()
@@ -18,26 +20,32 @@ const CustomHeader = () => {
         <View style={[styles.container, globalStyle.shadow, globalStyle.rowCenterBetween]}>
             <Image style={styles.logo} source={logo} />
 
-            <View style={[globalStyle.rowCenterBetween, {width:"40%"}]}>
-                <Feather name='cast' size={20} color={Colors.secondary}/>
-                <AntDesign name='bells' size={20} color={Colors.secondary}/>
-                <Feather name='search' size={20} color={Colors.secondary}/>
-                <FontAwesome name='user' size={20} color={Colors.secondary}/>
-                <FontAwesome onPress={handleSignOut} name='sign-out' size={17} color={Colors.secondary}/>
+            <View style={[globalStyle.rowCenterBetween, { width: "60%" }]}>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={theme ? "#45ff30" : "#f4f3f4"}
+                    onValueChange={()=>handleTheme(!theme)}
+                    value={theme}
+                />
+                <Feather name='cast' size={20} color={Colors.secondary} />
+                <AntDesign name='bells' size={20} color={Colors.secondary} />
+                <Feather name='search' size={20} color={Colors.secondary} />
+                <FontAwesome name='user' size={20} color={Colors.secondary} />
+                <FontAwesome onPress={handleSignOut} name='sign-out' size={17} color={Colors.secondary} />
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         backgroundColor: Colors.primary,
-        padding:10,
+        padding: 10,
     },
-    logo:{
-        resizeMode:"contain",
-        width:100,
-        height:20,
+    logo: {
+        resizeMode: "contain",
+        width: 100,
+        height: 20,
     }
 })
 
