@@ -54,7 +54,7 @@ const SignInScreen = ({ navigation }) => {
                     <CustomButton
                        title={loading ? "Signing In..." : "Sign In"}
                         bgColor="red"
-                        onPress={handleSignIn}
+                        onPress={loading ? null : handleSignIn}
                     />
                 </KeyboardAvoidingView>
 

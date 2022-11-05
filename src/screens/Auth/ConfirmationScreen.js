@@ -23,17 +23,17 @@ const ConfirmationScreen = ({ navigation, route }) => {
         }
     }
     return (
-        <View style={{backgroundColor: Colors.secondary, paddingTop:20}}>
+        <View style={{ backgroundColor: Colors.secondary, paddingTop: 20 }}>
             <CustomInput
-                title={loading ? "Confirming..." : "Confirm Code"}
+                title="Confirm Code"
                 value={confirmCode}
                 onChangeText={setConfirmCode}
                 placeholder="Enter your verify code"
             />
             <CustomButton
-                title="Confirm Now"
+                title={loading ? "Confirming..." : "Confirm Now"}
                 bgColor="green"
-                onPress={handleConfirmSignUp}
+                onPress={loading ? null : handleConfirmSignUp}
             />
         </View>
     )

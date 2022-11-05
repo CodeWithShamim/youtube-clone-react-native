@@ -68,7 +68,7 @@ const SignUpScreen = ({ navigation }) => {
           <CustomButton
             title={loading ? "Signing Up..." : "Sign Up"}
             bgColor="red"
-            onPress={handleSignUp}
+            onPress={loading ? null : handleSignUp}
           />
         </KeyboardAvoidingView>
 
