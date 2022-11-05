@@ -5,7 +5,7 @@ import HomeScreen from './src/screens/HomeScreen'
 import VideoPlayScreen from './src/screens/VideoPlayScreen'
 import ShortsVideoScreen from './src/screens/ShortsVideoScreen'
 import LibraryScreen from './src/screens/LibraryScreen'
-import { withAuthenticator } from "aws-amplify-react-native";
+// import { withAuthenticator } from "aws-amplify-react-native";
 import VideoUploadScreen from './src/screens/VideoUploadScreen'
 import { Auth, DataStore } from 'aws-amplify'
 import { User } from './src/models'
@@ -13,6 +13,7 @@ import { StripeProvider } from '@stripe/stripe-react-native'
 import { P_K } from '@env'
 import MemberShips from './src/screens/MemberShips'
 import ThemeProvider from './src/store/context'
+import { SignInScreen, SignUpScreen } from './src/screens/Auth'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -43,6 +44,11 @@ const App = () => {
       <ThemeProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {/* ------auth----- */}
+            <Stack.Screen name='SignIn' component={SignInScreen} />
+            <Stack.Screen name='SignUp' component={SignUpScreen} />
+
+            {/* content */}
             <Stack.Screen name='Home' component={HomeScreen} />
             <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
             <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
@@ -57,4 +63,4 @@ const App = () => {
   )
 }
 
-export default withAuthenticator(App)
+export default App
