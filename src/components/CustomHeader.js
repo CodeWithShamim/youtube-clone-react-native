@@ -10,13 +10,14 @@ import { ThemeContext } from '../store/context'
 import { useNavigation } from '@react-navigation/native'
 
 const CustomHeader = () => {
-    const { theme, handleTheme } = useContext(ThemeContext)
+    const { theme, handleTheme, setUser } = useContext(ThemeContext)
     const globalStyle = GlobalStyle.useGlobalStyle()
     const navigation = useNavigation()
 
     const handleSignOut = async () => {
         try {
             await Auth.signOut()
+            setUser("")
             navigation.navigate("SignIn")
         } catch (error) {
             Alert.alert("Error", error.message)

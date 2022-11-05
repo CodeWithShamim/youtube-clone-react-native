@@ -6,6 +6,7 @@ export const ThemeContext = createContext()
 
 const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState()
+    const [user, setUser] = useState("")
 
     useEffect(() => {
         const getAsyncValue = async () => {
@@ -35,7 +36,7 @@ const ThemeProvider = ({ children }) => {
     console.log("Theme", theme);
 
     return (
-        <ThemeContext.Provider value={{ theme, handleTheme }}>
+        <ThemeContext.Provider value={{ theme, handleTheme, user, setUser }}>
             {children}
         </ThemeContext.Provider>
     )

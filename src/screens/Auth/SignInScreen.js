@@ -1,11 +1,12 @@
 
 import { View, Text, StyleSheet, KeyboardAvoidingView, Image, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { Colors, GlobalStyle } from '../../styles'
 import CustomButton from '../../components/CustomButton'
 import SignInImage from '../../assets/images/signIn.jpg'
 import { Auth } from 'aws-amplify'
+import { ThemeContext } from '../../store/context'
 
 const SignInScreen = ({ navigation }) => {
     const [username, setUsername] = useState("")
@@ -14,13 +15,16 @@ const SignInScreen = ({ navigation }) => {
 
 
     const globalStyle = GlobalStyle.useGlobalStyle()
+    const { setUser } = useContext(ThemeContext)
 
     const handleSignIn = async () => {
         if (!username || !password) return Alert.alert("Warning!", "username or password missing.")
         try {
             setLoading(true)
             const user = await Auth.signIn(username, password)
+            setUser(user.attributes?.sub)
             setLoading(false)
+            
             if (user) navigation.navigate("Home")
         } catch (error) {
             setLoading(false)
@@ -52,7 +56,7 @@ const SignInScreen = ({ navigation }) => {
                         secureTextEntry={true}
                     />
                     <CustomButton
-                       title={loading ? "Signing In..." : "Sign In"}
+                        title={loading ? "Signing In..." : "Sign In"}
                         bgColor="red"
                         onPress={loading ? null : handleSignIn}
                     />
