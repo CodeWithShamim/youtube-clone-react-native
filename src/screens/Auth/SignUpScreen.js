@@ -27,7 +27,7 @@ const SignUpScreen = ({ navigation }) => {
         }
       })
       setLoading(false)
-      if (user) navigation.navigate("SignIn")
+      if (user) navigation.navigate("ConfirmSignUp", { username })
     } catch (error) {
       setLoading(false)
       Alert.alert("Error", error.message)

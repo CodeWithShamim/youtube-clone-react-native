@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from './src/screens/HomeScreen'
 import VideoPlayScreen from './src/screens/VideoPlayScreen'
 import ShortsVideoScreen from './src/screens/ShortsVideoScreen'
 import LibraryScreen from './src/screens/LibraryScreen'
-// import { withAuthenticator } from "aws-amplify-react-native";
 import VideoUploadScreen from './src/screens/VideoUploadScreen'
 import { Auth, DataStore } from 'aws-amplify'
 import { User } from './src/models'
@@ -13,16 +12,18 @@ import { StripeProvider } from '@stripe/stripe-react-native'
 import { P_K } from '@env'
 import MemberShips from './src/screens/MemberShips'
 import ThemeProvider from './src/store/context'
-import { SignInScreen, SignUpScreen } from './src/screens/Auth'
+import { SignInScreen, SignUpScreen, ConfirmationScreen } from './src/screens/Auth'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+  const [user, setUser] = useState("")
 
   useEffect(() => {
     const saveUserToDB = async () => {
       const userInfo = await Auth.currentAuthenticatedUser()
       if (!userInfo) return
       const userId = userInfo.attributes?.sub
+      setUser(userId)
       const isUserInDB = (await DataStore.query(User)).find((u) => u?.sub === userId)
 
       if (!isUserInDB) {
@@ -43,10 +44,12 @@ const App = () => {
     <StripeProvider publishableKey={P_K}>
       <ThemeProvider>
         <NavigationContainer>
+
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* ------auth----- */}
             <Stack.Screen name='SignIn' component={SignInScreen} />
             <Stack.Screen name='SignUp' component={SignUpScreen} />
+            <Stack.Screen name='ConfirmSignUp' component={ConfirmationScreen} />
 
             {/* content */}
             <Stack.Screen name='Home' component={HomeScreen} />
@@ -56,6 +59,7 @@ const App = () => {
             <Stack.Screen name='MemberShips' component={MemberShips} />
             <Stack.Screen name='Library' component={LibraryScreen} />
           </Stack.Navigator>
+
         </NavigationContainer >
       </ThemeProvider>
     </StripeProvider>
