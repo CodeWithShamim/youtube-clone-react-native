@@ -1,24 +1,41 @@
 
-import { View, Text, StyleSheet, KeyboardAvoidingView, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { Colors, GlobalStyle } from '../../styles'
 import CustomButton from '../../components/CustomButton'
 import SignInImage from '../../assets/images/signUp.jpg'
+import { Auth } from 'aws-amplify'
 
 const SignUpScreen = ({ navigation }) => {
-  const [userName, setUserName] = useState("")
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const globalStyle = GlobalStyle.useGlobalStyle()
 
-  console.log("Email", email)
-  console.log("Password", password)
-  console.log("userName", userName)
+  const handleSignUp = async () => {
+    if (!username || !email || !password) return Alert.alert("Warning!", "Please provide all information.")
+    try {
+      setLoading(true)
+      const { user } = await Auth.signUp({
+        username,
+        password,
+        attributes: {
+          email
+        }
+      })
+      setLoading(false)
+      if (user) navigation.navigate("SignIn")
+    } catch (error) {
+      setLoading(false)
+      Alert.alert("Error", error.message)
 
-  const handleSignUp = () => {
-    console.log("Sign up");
+    }
+    setUsername("")
+    setEmail("")
+    setPassword("")
   }
 
   return (
@@ -31,25 +48,25 @@ const SignUpScreen = ({ navigation }) => {
         <KeyboardAvoidingView>
           <CustomInput
             title="Username"
-            // value=""
-            onChangeText={setUserName}
+            value={username}
+            onChangeText={setUsername}
             placeholder="Enter your username"
           />
           <CustomInput
             title="Email"
-            // value=""
+            value={email}
             onChangeText={setEmail}
             placeholder="Enter your email"
           />
           <CustomInput
             title="Password"
-            // value=""
+            value={password}
             onChangeText={setPassword}
             placeholder="Enter your password"
             secureTextEntry={true}
           />
           <CustomButton
-            title="Sign Up"
+            title={loading ? "Signing Up..." : "Sign Up"}
             bgColor="red"
             onPress={handleSignUp}
           />

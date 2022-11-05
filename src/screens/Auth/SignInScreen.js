@@ -1,22 +1,33 @@
 
-import { View, Text, StyleSheet, KeyboardAvoidingView, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { Colors, GlobalStyle } from '../../styles'
 import CustomButton from '../../components/CustomButton'
 import SignInImage from '../../assets/images/signIn.jpg'
+import { Auth } from 'aws-amplify'
 
 const SignInScreen = ({ navigation }) => {
-    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
+
 
     const globalStyle = GlobalStyle.useGlobalStyle()
 
-    console.log("Email", email)
-    console.log("Password", password)
-
-    const handleSignIn = () => {
-        console.log("Sign in");
+    const handleSignIn = async () => {
+        if (!username || !password) return Alert.alert("Warning!", "username or password missing.")
+        try {
+            setLoading(true)
+            const user = await Auth.signIn(username, password)
+            setLoading(false)
+            if (user) navigation.navigate("Home")
+        } catch (error) {
+            setLoading(false)
+            Alert.alert("Error", error.message)
+        }
+        setUsername("")
+        setPassword("")
     }
 
     return (
@@ -29,19 +40,19 @@ const SignInScreen = ({ navigation }) => {
                 <KeyboardAvoidingView>
                     <CustomInput
                         title="Username"
-                        // value=""
-                        onChangeText={setEmail}
+                        value={username}
+                        onChangeText={setUsername}
                         placeholder="Enter your username"
                     />
                     <CustomInput
                         title="Password"
-                        // value=""
+                        value={password}
                         onChangeText={setPassword}
                         placeholder="Enter your password"
                         secureTextEntry={true}
                     />
                     <CustomButton
-                        title="Sign In"
+                       title={loading ? "Signing In..." : "Sign In"}
                         bgColor="red"
                         onPress={handleSignIn}
                     />
