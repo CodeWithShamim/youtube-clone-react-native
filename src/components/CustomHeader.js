@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, Switch, Alert, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
-import logo from '../assets/images/logo.png'
+import logo from '../assets/images/logo2.png'
 import { Colors, GlobalStyle } from '../styles'
 import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
