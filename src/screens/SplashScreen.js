@@ -1,15 +1,17 @@
-import { View, StyleSheet, Image } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React from 'react'
 import { Colors } from '../styles'
-import Logo from '../assets/images/logo.png'
+import Logo from '../assets/lottie/splash.json'
+import Lottie from 'lottie-react-native'
 
 const SplashScreen = () => {
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.image}
+            <Lottie
+                style={{ width: 120, height: 120 }}
                 source={Logo}
-                resizeMode="cover"
+                autoPlay
+                loop
             />
         </View>
     )
@@ -21,10 +23,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.secondary,
         justifyContent: "center",
         alignItems: "center",
-    },
-    image: {
-        width: 120,
-        height: 120,
     },
 })
 
