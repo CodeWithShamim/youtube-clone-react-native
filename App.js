@@ -26,7 +26,7 @@ const App = () => {
         const userInfo = await Auth.currentAuthenticatedUser()
         if (!userInfo) {
           setInitialyAppLoaded(false)
-          return
+          return false
         }
         const userId = userInfo.attributes?.sub
         setUser(userId)

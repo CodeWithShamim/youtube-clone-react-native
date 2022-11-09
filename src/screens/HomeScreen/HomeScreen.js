@@ -15,14 +15,21 @@ const HomeScreen = () => {
     // fetch video 
     const fetchVideos = async () => {
         setIsLoading(true)
-        const result = await DataStore.query(Video)
-        if (result.length <= 0) {
-            fetchVideos()
-            // return false
+        try {
+            const result = await DataStore.query(Video)
+            if (result.length <= 0) {
+                fetchVideos()
+                // return false
+            }
+
+            setVideos(result.reverse())
+            setIsLoading(false)
+        } catch (error) {
+            setIsLoading(false)
+            console.log("Error from HomeScreen", error.message);
         }
-        console.log("Load homeScreen data");
-        setVideos(result.reverse())
-        setIsLoading(false)
+
+
     }
 
     useEffect(() => {
@@ -30,9 +37,11 @@ const HomeScreen = () => {
     }, [])
 
     // pull to refresh 
-    const handleLoadData = () => {
-        fetchVideos()
+    const handleLoadData = async () => {
+        await fetchVideos()
     }
+
+    console.log("Load homeScreen data");
 
     return (
         <InnerLayer header={true} footer={true} loading={isLoading}>
