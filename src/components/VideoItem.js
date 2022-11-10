@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import defaultThumbnail from "../assets/images/placeholder.jpeg"
 import { Storage, DataStore } from 'aws-amplify'
 import { User } from '../models'
-import ImageLoad from 'react-native-image-placeholder'
+import FastImage from 'react-native-fast-image'
 
 const VideoItem = ({ item }) => {
 
@@ -30,12 +30,12 @@ const VideoItem = ({ item }) => {
         <View style={styles.root}>
             {/* thumbnail */}
             <Pressable onPress={() => handlePlayVideo(id)}>
-                <ImageLoad
+                <FastImage
                     style={styles.thumbnail}
-                    placeholderSource={defaultThumbnail}
-                    placeholderStyle={styles.thumbnail}
-                    loadingStyle={{ size: 'large', color: 'blue' }}
-                    source={thumbnailURL && { uri: thumbnailURL }}
+                    source={{ uri: thumbnailURL, priority: FastImage.priority.normal }}
+                    resizeMode={FastImage.resizeMode.cover}
+                    fallback
+                    defaultSource={defaultThumbnail}
                 />
                 <Text style={styles.time}>{duration}</Text>
             </Pressable>

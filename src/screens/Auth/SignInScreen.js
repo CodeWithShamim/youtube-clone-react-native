@@ -4,9 +4,9 @@ import React, { useContext, useState } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { Colors, GlobalStyle } from '../../styles'
 import CustomButton from '../../components/CustomButton'
-import SignInImage from '../../assets/images/signIn.jpg'
 import { Auth } from 'aws-amplify'
 import { ThemeContext } from '../../store/context'
+import Lottie from 'lottie-react-native'
 
 const SignInScreen = ({ navigation }) => {
     const [username, setUsername] = useState("")
@@ -24,7 +24,7 @@ const SignInScreen = ({ navigation }) => {
             const user = await Auth.signIn(username, password)
             setUser(user.attributes?.sub)
             setLoading(false)
-            
+
             if (user) navigation.navigate("Home")
         } catch (error) {
             setLoading(false)
@@ -37,7 +37,11 @@ const SignInScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.topContent}>
-                <Image style={styles.image} source={SignInImage} resizeMode="cover" />
+                <Lottie
+                    source={require("../../assets/lottie/login.json")}
+                    style={styles.lottieImage}
+                    autoPlay
+                    loop />
             </View>
 
             <View style={[styles.bottomContent, globalStyle.shadow]}>
@@ -93,12 +97,10 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 40,
         paddingTop: "10%",
     },
-    image: {
+    lottieImage: {
         flex: 1,
         height: "100%",
         width: "100%",
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
     }
 })
 

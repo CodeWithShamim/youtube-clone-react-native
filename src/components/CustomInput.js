@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         position: "absolute",
         left: 30,
-        top: -11,
+        top: -12,
         backgroundColor: Colors.secondary,
-        paddingHorizontal: 10,
+        paddingHorizontal: 3,
     }
 })
 
