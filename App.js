@@ -13,12 +13,17 @@ import { P_K } from '@env'
 import MemberShips from './src/screens/MemberShips'
 import { ThemeContext } from './src/store/context'
 import { SignInScreen, SignUpScreen, ConfirmationScreen } from './src/screens/Auth'
-import SplashScreen from './src/screens/SplashScreen'
+import SplashScreenLoader from './src/screens/SplashScreenLoader'
+import SplashScreen from 'react-native-splash-screen'
 
 const App = () => {
   const Stack = createNativeStackNavigator();
   const [initialyAppLoaded, setInitialyAppLoaded] = useState(true)
   const { user, setUser } = useContext(ThemeContext)
+
+  useEffect(() => {
+    SplashScreen.hide()
+  }, [])
 
   useEffect(() => {
     const saveUserToDB = async () => {
@@ -55,36 +60,36 @@ const App = () => {
 
   return (
     <StripeProvider publishableKey={P_K}>
-      
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
-            {initialyAppLoaded &&
-              <>
-                <Stack.Screen name='Splash' component={SplashScreen} />
-              </>
-            }
 
-            {user ?
-              <>
-                {/* content */}
-                <Stack.Screen name='Home' component={HomeScreen} />
-                <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
-                <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
-                <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
-                <Stack.Screen name='MemberShips' component={MemberShips} />
-                <Stack.Screen name='Library' component={LibraryScreen} />
-              </>
-              :
-              <>
-                {/* ------auth----- */}
-                <Stack.Screen name='SignIn' component={SignInScreen} />
-                <Stack.Screen name='SignUp' component={SignUpScreen} />
-                <Stack.Screen name='ConfirmSignUp' component={ConfirmationScreen} />
-              </>
-            }
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+          {initialyAppLoaded &&
+            <>
+              <Stack.Screen name='Splash' component={SplashScreenLoader} />
+            </>
+          }
 
-          </Stack.Navigator>
-        </NavigationContainer >
+          {user ?
+            <>
+              {/* content */}
+              <Stack.Screen name='Home' component={HomeScreen} />
+              <Stack.Screen name='VideoPlay' component={VideoPlayScreen} />
+              <Stack.Screen name='ShortsVideo' component={ShortsVideoScreen} />
+              <Stack.Screen name='VideoUpload' component={VideoUploadScreen} />
+              <Stack.Screen name='MemberShips' component={MemberShips} />
+              <Stack.Screen name='Library' component={LibraryScreen} />
+            </>
+            :
+            <>
+              {/* ------auth----- */}
+              <Stack.Screen name='SignIn' component={SignInScreen} />
+              <Stack.Screen name='SignUp' component={SignUpScreen} />
+              <Stack.Screen name='ConfirmSignUp' component={ConfirmationScreen} />
+            </>
+          }
+
+        </Stack.Navigator>
+      </NavigationContainer >
     </StripeProvider>
 
   )

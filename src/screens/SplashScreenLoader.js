@@ -4,7 +4,7 @@ import { Colors } from '../styles'
 import Logo from '../assets/lottie/splash.json'
 import Lottie from 'lottie-react-native'
 
-const SplashScreen = () => {
+const SplashScreenLoader = () => {
     return (
         <View style={styles.container}>
             <Lottie
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default SplashScreen
+export default SplashScreenLoader

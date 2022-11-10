@@ -266,6 +266,8 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    implementation project(':react-native-splash-screen')
+
     // for file system 
     implementation project(':react-native-fs')
 
